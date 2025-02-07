@@ -20,7 +20,9 @@
     "type": "git",
     "url": ""
   },
-  "dependencies": {},
+  "dependencies": {
+    "fuse.js": "^7.1.0"
+  },
   "devDependencies": {
     "@ant-design/icons": "5.5.1",
     "@educandu/dev-tools": "^14.0.0",
