@@ -21,7 +21,7 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
   while ((match = regex.exec(exampleText)) !== null) {
     inserts.push({
       word: match[1],
-      words: ['Hier kommen die möglichen Einsetzungen hin']
+      words: []
     });
   };
 
