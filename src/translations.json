@@ -11,6 +11,10 @@
     "currentServerTime": {
       "en": "Current server time",
       "de": "Test erfolgreich 1!"
+    },
+    "gapText": {
+      "en": "Gap text",
+      "de": "Lückentext"
     }
   }
 }

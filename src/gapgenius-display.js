@@ -50,7 +50,7 @@ export default function GapgeniusDisplay({ content, input, canModifyInput, onInp
   }, [httpClient, t]);
 
   return (
-    <div className="EP_Educandu_Example_Display">
+    <div className="EP_Educandu_Gapgenius_Display">
       <div className={`u-horizontally-centered u-width-${content.width}`}>
         <Markdown renderAnchors>
           {content.text}
@@ -67,7 +67,7 @@ export default function GapgeniusDisplay({ content, input, canModifyInput, onInp
           </Form.Item>
         </Form>
         {!!serverTime && (
-          <div className="EP_Educandu_Example_Display-time">
+          <div className="EP_Educandu_Gapgenius_Display-time">
             {t('currentServerTime')}: {formatDate(serverTime)}
           </div>
         )}

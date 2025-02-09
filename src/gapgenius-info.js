@@ -40,16 +40,22 @@ class GapGeniusInfo {
   getDefaultContent() {
     return {
       text: '',
-      width: 100
+      width: 100,
+      inserts: []
     };
   }
 
   validateContent(content) {
     const schema = joi.object({
       text: joi.string().allow('').required(),
-      width: joi.number().min(0).max(100).required()
+      width: joi.number().min(0).max(100).required(),
+      inserts: joi.array().items(
+        joi.object({
+          word: joi.string().required(),
+          words: joi.array().items(joi.string()).required()
+        })
+      ).required()
     });
-
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });
   }
 
