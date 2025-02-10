@@ -26,7 +26,7 @@ class GapGeniusInfo {
   }
 
   getGroups() {
-    return [PLUGIN_GROUP.textImage];
+    return [PLUGIN_GROUP.interactive, PLUGIN_GROUP.textImage];
   }
 
   async resolveDisplayComponent() {
@@ -41,7 +41,8 @@ class GapGeniusInfo {
     return {
       text: '',
       width: 100,
-      inserts: []
+      targetWords: [],
+      replacements: []
     };
   }
 
@@ -49,12 +50,8 @@ class GapGeniusInfo {
     const schema = joi.object({
       text: joi.string().allow('').required(),
       width: joi.number().min(0).max(100).required(),
-      inserts: joi.array().items(
-        joi.object({
-          word: joi.string().required(),
-          words: joi.array().items(joi.string()).required()
-        })
-      ).required()
+      targetWords: joi.array().items(joi.string()).required(),
+      replacements: joi.array().items(joi.array().items(joi.string())).required()
     });
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });
   }
