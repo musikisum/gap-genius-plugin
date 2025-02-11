@@ -22,8 +22,6 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     targetWords.push(match[1]);
   };
 
-  console.log('content', content);
-
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
   };
@@ -36,37 +34,36 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     updateContent({ text: GapgeniusUtils.exampleText });
   };
 
-  const onTargetWordChange = (event, index) => {
-    updateContent({ text: event.target.value });
+  const onTextChange = event => {
+    const departure = event.target.value;
+    // TODO
+    updateContent({ text: departure });
   };
 
-  const onReplacementsChange = (event, index) => {
-    const updateWords = event.target.value.split(/[ ,;:]+/).filter(Boolean);
-    console.log(updateWords)
+  const onReplacementsChange = (value, index) => {
+    if (!value) {
+      return;
+    } 
+    const updateWords = value.split(/[ ,;:]+/).filter(Boolean);
+    // TODO
   };
 
   return (
     <div className="EP_Educandu_Gapgenius_Editor">
       <Form labelAlign="left">
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
-          <MarkdownInput value={text} onChange={onTargetWordChange} renderAnchors />
+          <MarkdownInput value={text} onChange={onTextChange} renderAnchors />
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" onClick={onExampleButtonClick}>Beispieltext</Button>
+        <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
+          <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
         </Form.Item>
-        <Form.Item>
-          {/* <GapGeniusPanel inserts={inserts} updateContent={updateContent} /> */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            { targetWords.map((word, index) => {
-              return (
-                <div key={index} style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                  <Input value={word} readOnly onChange={e => onTargetWordChange(e, index)} style={{ width: '25%' }} />
-                  <EditableInput value={replacements[index]} onSave={e => onReplacementsChange(e, index)} />
-                </div>
-              );
-            })}
-          </div>
-        </Form.Item>
+        { targetWords.map((word, index) => {
+          return (
+            <Form.Item key={index} label={word} {...FORM_ITEM_LAYOUT}>
+              <EditableInput value={replacements[word]?.join(', ')} onSave={e => onReplacementsChange(e, index)} />
+            </Form.Item>
+          );
+        })}
         <Form.Item
           label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
           {...FORM_ITEM_LAYOUT}

@@ -15,6 +15,14 @@
     "gapText": {
       "en": "Gap text",
       "de": "Lückentext"
+    },
+    "exampleText": {
+      "en": "Text example",
+      "de": "Beispieltext"
+    },
+    "insertText": {
+      "en": "Insert example text",
+      "de": "Beispieltext einfügen"
     }
   }
 }
