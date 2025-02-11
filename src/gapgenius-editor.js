@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Form, Input } from 'antd';
+import React from 'react';
+import { Button, Form } from 'antd';
 import { useTranslation } from 'react-i18next';
 import GapgeniusUtils from './gapgenius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
@@ -12,15 +12,12 @@ import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider
 export default function GaggeniusEditor({ content, onContentChanged }) {
   
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
-  const regex = /\?\?(.*?)\?\?/g;
 
-  const { text, width, targetWords, replacements } = content;
-
-  let match;
-  targetWords.length = 0;
-  while ((match = regex.exec(text)) !== null) {
-    targetWords.push(match[1]);
-  };
+  const { text, width, replacements } = content;
+  
+  const departureTerms = GapgeniusUtils.analyseText(text);
+  const isEval = GapgeniusUtils.checkNumberOfSpecialSigns(text);
+  const adjustetReplacementsTerms = GapgeniusUtils.adjustReplacementsTerms(departureTerms, replacements);
 
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
@@ -34,9 +31,8 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     updateContent({ text: GapgeniusUtils.exampleText });
   };
 
-  const onTextChange = event => {
+  const onTextChange = event => {    
     const departure = event.target.value;
-    // TODO
     updateContent({ text: departure });
   };
 
@@ -44,8 +40,9 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     if (!value) {
       return;
     } 
-    const updateWords = value.split(/[ ,;:]+/).filter(Boolean);
-    // TODO
+    const departureTerm = departureTerms[index];
+    adjustetReplacementsTerms[departureTerm] = value;
+    updateContent({ replacements: adjustetReplacementsTerms });
   };
 
   return (
@@ -57,13 +54,15 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
           <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
         </Form.Item>
-        { targetWords.map((word, index) => {
-          return (
-            <Form.Item key={index} label={word} {...FORM_ITEM_LAYOUT}>
-              <EditableInput value={replacements[word]?.join(', ')} onSave={e => onReplacementsChange(e, index)} />
-            </Form.Item>
-          );
-        })}
+        { isEval
+          ? departureTerms.map((word, index) => {
+            return (
+              <Form.Item key={index} label={word} {...FORM_ITEM_LAYOUT}>
+                <EditableInput value={adjustetReplacementsTerms[word]} onSave={e => onReplacementsChange(e, index)} />
+              </Form.Item>
+            );
+          })
+          : <div style={{ textAlign: 'center', marginTop: '20px', marginBottom: '40px', color: 'red', fontWeight: 'bold' }}>{t('errorText')}</div>}
         <Form.Item
           label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
           {...FORM_ITEM_LAYOUT}

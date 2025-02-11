@@ -41,7 +41,6 @@ class GapGeniusInfo {
     return {
       text: '',
       width: 100,
-      targetWords: [],
       replacements: {}
     };
   }
@@ -50,12 +49,9 @@ class GapGeniusInfo {
     const schema = joi.object({
       text: joi.string().allow('').required(),
       width: joi.number().min(0).max(100).required(),
-      targetWords: joi.array().items(joi.string()).required(),
-      replacements: joi.object({
-        value: joi.string().optional(),
-        synonyms: joi.string().optional()
-      }).required()
+      replacements: joi.object().pattern(joi.string(), joi.string()).required()
     });
+
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });
   }
 

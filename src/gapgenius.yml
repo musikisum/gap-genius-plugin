@@ -17,3 +17,6 @@ musikisum/educandu-plugin-gap-genius:
   insertText:
     en: Insert example text
     de: Beispieltext einfügen
+  errorText:
+    en: Bitte geben Sie eine gerade Anzahl von ??-Zeichen an!
+    de: Bitte geben Sie eine gerade Anzahl von ??-Zeichen an! 
