@@ -1,4 +1,4 @@
-import ExampleInfo from './gapgenius-info.js';
+import ExampleInfo from './gapGenius-info.js';
 import { beforeEach, describe, expect, it } from 'vitest';
 import GithubFlavoredMarkdown from '@educandu/educandu/common/github-flavored-markdown.js';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form } from 'antd';
 import { useTranslation } from 'react-i18next';
-import GapgeniusUtils from './gapgenius-utils.js';
+import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
 import { FORM_ITEM_LAYOUT } from '@educandu/educandu/domain/constants.js';
@@ -15,9 +15,7 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
 
   const { text, width, replacements } = content;
   
-  const departureTerms = GapgeniusUtils.analyseText(text);
-  const isEval = GapgeniusUtils.checkNumberOfSpecialSigns(text);
-  const adjustetReplacementsTerms = GapgeniusUtils.adjustReplacementsTerms(departureTerms, replacements);
+  const gapGenius = GapGeniusUtils.transformTextToGapGeniusModel(text, replacements);
 
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
@@ -28,10 +26,11 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
   };
 
   const onExampleButtonClick = () => {
-    updateContent({ text: GapgeniusUtils.exampleText });
+    updateContent({ text: GapGeniusUtils.exampleText });
   };
 
-  const onTextChange = event => {    
+  const onTextChange = event => {
+    // TODO: delete entry in dictionary
     const departure = event.target.value;
     updateContent({ text: departure });
   };
@@ -40,9 +39,11 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     if (!value) {
       return;
     } 
-    const departureTerm = departureTerms[index];
-    adjustetReplacementsTerms[departureTerm] = value;
-    updateContent({ replacements: adjustetReplacementsTerms });
+    const dicKey = gapGenius.indices[index];
+    const synonyms = gapGenius.replacementDic[dicKey];
+    synonyms.length = 0;
+    synonyms.push(...value.split(/[ ,;:]+/).filter(Boolean));
+    updateContent({ replacements: gapGenius.replacementDic });
   };
 
   return (
@@ -54,11 +55,11 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
           <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
         </Form.Item>
-        { isEval
-          ? departureTerms.map((word, index) => {
+        { gapGenius.isEval
+          ? gapGenius.keywords.map((word, index) => {
             return (
               <Form.Item key={index} label={word} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={adjustetReplacementsTerms[word]} onSave={e => onReplacementsChange(e, index)} />
+                <EditableInput value={gapGenius.replacementDic[gapGenius.indices[index]].join(', ')} onSave={e => onReplacementsChange(e, index)} />
               </Form.Item>
             );
           })

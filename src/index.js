@@ -1,1 +1,1 @@
-export { default } from './gapgenius-info.js';
+export { default } from './gap-genius-info.js';

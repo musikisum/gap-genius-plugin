@@ -3,7 +3,7 @@ import path from 'node:path';
 import parseBool from 'parseboolean';
 import educandu from '@educandu/educandu';
 import customResolvers from './custom-resolvers.js';
-import ExampleController from '../../src/gapgenius-controller.js';
+import ExampleController from '../../src/gap-genius-controller.js';
 
 const thisDir = path.dirname(url.fileURLToPath(import.meta.url));
 

@@ -30,11 +30,11 @@ class GapGeniusInfo {
   }
 
   async resolveDisplayComponent() {
-    return (await import('./gapgenius-display.js')).default;
+    return (await import('./gap-genius-display.js')).default;
   }
 
   async resolveEditorComponent() {
-    return (await import('./gapgenius-editor.js')).default;
+    return (await import('./gap-genius-editor.js')).default;
   }
 
   getDefaultContent() {
@@ -49,7 +49,7 @@ class GapGeniusInfo {
     const schema = joi.object({
       text: joi.string().allow('').required(),
       width: joi.number().min(0).max(100).required(),
-      replacements: joi.object().pattern(joi.string(), joi.string()).required()
+      replacements: joi.object().pattern(joi.string().regex(/^\d+$/), joi.array().items(joi.string())).required()
     });
 
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });
