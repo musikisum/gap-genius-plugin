@@ -9,14 +9,13 @@ import { FORM_ITEM_LAYOUT } from '@educandu/educandu/domain/constants.js';
 import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
 import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider.js';
+import { replaceItem } from '@educandu/educandu/utils/array-utils.js';
 
 export default function GaggeniusEditor({ content, onContentChanged }) {
   
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
-
-  const { text, width, replacements } = content;
   
-  const gapGenius = GapGeniusUtils.transformTextToGapGeniusModel(text, replacements);
+  const gapGenius = GapGeniusUtils.transformTextToGapGeniusModel(content);
 
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
@@ -31,19 +30,8 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
   };
 
   const onTextChange = event => {
-    // TODO: delete entry in dictionary
-    const departure = event.target.value;
-    updateContent({ text: departure });
-    if (gapGenius.isEval) {
-      const indices = gapGenius.indices;
-      const copiedReplacements = cloneDeep(replacements);
-      Object.keys(copiedReplacements).forEach(key => {
-        if (!indices.includes(Number(key))) {
-          delete copiedReplacements[key];
-        }
-      });
-      updateContent({ replacements: copiedReplacements });
-    }
+    const newText = event.target.value;;
+    updateContent({ ...content, text: newText });
   };
 
   const onReplacementsChange = (value, index) => {
@@ -51,17 +39,17 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
       return;
     } 
     const dicKey = gapGenius.indices[index];
-    const synonyms = gapGenius.replacementDic[dicKey];
+    const synonyms = gapGenius.replacements[dicKey];
     synonyms.length = 0;
     synonyms.push(...value.split(/[ ,;:]+/).filter(Boolean));
-    updateContent({ replacements: gapGenius.replacementDic });
+    updateContent({ replacements: gapGenius.replacements });
   };
 
   return (
     <div className="EP_Educandu_Gapgenius_Editor">
       <Form labelAlign="left">
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
-          <MarkdownInput value={text} onChange={onTextChange} renderAnchors />
+          <MarkdownInput value={gapGenius.text} onChange={onTextChange} renderAnchors />
         </Form.Item>
         <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
           <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
@@ -70,7 +58,7 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
           ? gapGenius.keywords.map((word, index) => {
             return (
               <Form.Item key={index} label={word} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={gapGenius.replacementDic[gapGenius.indices[index]].join(', ')} onSave={e => onReplacementsChange(e, index)} />
+                <EditableInput value={gapGenius.replacements[gapGenius.indices[index]].join(', ')} onSave={e => onReplacementsChange(e, index)} />
               </Form.Item>
             );
           })
@@ -79,7 +67,7 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
           label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
           {...FORM_ITEM_LAYOUT}
           >
-          <ObjectWidthSlider value={width} onChange={handleWidthChange} />
+          <ObjectWidthSlider value={gapGenius.width} onChange={handleWidthChange} />
         </Form.Item>
       </Form>
     </div>
