@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
+import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 import { FORM_ITEM_LAYOUT } from '@educandu/educandu/domain/constants.js';
 import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
@@ -33,6 +34,16 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
     // TODO: delete entry in dictionary
     const departure = event.target.value;
     updateContent({ text: departure });
+    if (gapGenius.isEval) {
+      const indices = gapGenius.indices;
+      const copiedReplacements = cloneDeep(replacements);
+      Object.keys(copiedReplacements).forEach(key => {
+        if (!indices.includes(Number(key))) {
+          delete copiedReplacements[key];
+        }
+      });
+      updateContent({ replacements: copiedReplacements });
+    }
   };
 
   const onReplacementsChange = (value, index) => {
