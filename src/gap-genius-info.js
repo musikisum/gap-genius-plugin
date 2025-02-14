@@ -42,7 +42,6 @@ class GapGeniusInfo {
       text: '',
       width: 100,
       isEval: true,
-      indices: [],
       replacements: {}
     };
   }
@@ -52,7 +51,6 @@ class GapGeniusInfo {
       text: joi.string().allow('').required(),
       width: joi.number().min(0).max(100).required(),
       isEval: joi.bool().required(),
-      indices: joi.array().items(joi.number().optional()).required(),
       replacements: joi.object().pattern(
         joi.string().regex(/^\d+$/),
         joi.array().items(joi.string())

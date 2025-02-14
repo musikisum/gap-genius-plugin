@@ -24,36 +24,31 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
 
   const onExampleButtonClick = () => {
     const replacements = GapGeniusUtils.createNewReplacementObject(content.replacements, GapGeniusUtils.exampleText);
-    const indices = Object.keys(replacements).map(key => Number(key));
-    updateContent({ text: GapGeniusUtils.exampleText, replacements, indices });
+    updateContent({ text: GapGeniusUtils.exampleText, replacements });
   };
 
   const onTextChange = event => {
     const newText = event.target.value;
-
     const count = (newText.match(/\?\?/g) || [])?.length;
     // eslint-disable-next-line no-undefined
     const isEval = count !== null && count !== undefined && count % 2 === 0;
-    
-    if (!isEval) {
-      updateContent({ ...content, isEval, text: newText });
-    } else {
-      // hier neue Wert speichern
+    if (isEval) {
+      // Create a deep Copy of replacements object
       const replacements = GapGeniusUtils.createNewReplacementObject(content.replacements, newText);
-      const indices = Object.keys(replacements).map(key => Number(key));
-      updateContent({ text: newText, isEval, replacements, indices });
+      updateContent({ isEval, text: newText, replacements });      
+    } else {
+      updateContent({ isEval, text: newText });
     }
   };
 
-  const onReplacementsChange = (value, index) => {
-    if (!value) {
+  const onReplacementsChange = (value, key) => {
+    if (typeof value !== 'string') {
       return;
     } 
     const replacementsCopy = cloneDeep(content.replacements);
-    const dicKey = content.indices[index];
-    const synonyms = replacementsCopy[dicKey];
+    const synonyms = replacementsCopy[key];
     synonyms.length = 0;
-    synonyms.push(...value.split(/[ ;]+/).filter(Boolean));
+    synonyms.push(...value.split(/[;]+/).map(word => word.trim()));
     updateContent({ replacements: replacementsCopy });
   };
 
@@ -67,10 +62,10 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
           <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
         </Form.Item>
         { content.isEval
-          ? Object.keys(content.replacements).map((key, index) => {
+          ? Object.entries(content.replacements).map(([key, value]) => {
             return (
-              <Form.Item key={index} label={content.replacements[key][0]} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={content.replacements[content.indices[index]].join('; ')} onSave={e => onReplacementsChange(e, index)} />
+              <Form.Item key={key} label={value[0]} {...FORM_ITEM_LAYOUT}>
+                <EditableInput value={value.join('; ')} onSave={event => onReplacementsChange(event, key)} />
               </Form.Item>
             );
           })

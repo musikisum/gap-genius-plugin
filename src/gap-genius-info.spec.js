@@ -66,7 +66,6 @@ describe('gap-genius-info', () => {
         text: 'Example text',
         width: 50,
         isEval: true,
-        indices: [1, 2, 3],
         replacements: { 1: ['replacement1'] }
       };
   
@@ -78,7 +77,6 @@ describe('gap-genius-info', () => {
         text: 'Example text',
         width: 150, // Invalid width
         isEval: true,
-        indices: [1, 2, 3],
         replacements: { 1: ['replacement1'] }
       };
   
@@ -89,7 +87,6 @@ describe('gap-genius-info', () => {
       const invalidContent = {
         width: 50,
         isEval: true,
-        indices: [1, 2, 3],
         replacements: { 1: ['replacement1'] }
       };
   
@@ -101,7 +98,6 @@ describe('gap-genius-info', () => {
         text: 'Example text',
         width: 50,
         isEval: true,
-        indices: ['not a number'],
         replacements: { 1: ['replacement1'] }
       };
   
@@ -113,7 +109,6 @@ describe('gap-genius-info', () => {
         text: 'Example text',
         width: 50,
         isEval: true,
-        indices: [1, 2, 3],
         replacements: { notANumber: ['replacement1'] }
       };
   
