@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
+import React, { useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
 function EditableInput({ value, onSave }) {
@@ -14,8 +15,8 @@ function EditableInput({ value, onSave }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '2px', width: '100%' }}>
-      {editing ? (
-        <React.Fragment>
+      {editing 
+        ? <React.Fragment>
           <Input
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
@@ -25,9 +26,8 @@ function EditableInput({ value, onSave }) {
             style={{ flexGrow: 1 }}
             />
           <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
+          </React.Fragment>
+        : <React.Fragment>
           <span
             style={{
               cursor: 'pointer',
@@ -38,14 +38,23 @@ function EditableInput({ value, onSave }) {
               textOverflow: 'ellipsis'
             }}
             onClick={() => setEditing(true)}
-          >
+            >
             {inputValue || <div style={{ color: '#aaa' }}>Klicken zum Bearbeiten</div>}
           </span>
           <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
-        </React.Fragment>
-      )}
+          </React.Fragment>}
     </div>
   );
 }
+
+EditableInput.propTypes = {
+  value: PropTypes.array,
+  onSave: PropTypes.func
+};
+
+EditableInput.defaultProps = {
+  value: [],
+  onSave: null,
+};
 
 export default EditableInput;
