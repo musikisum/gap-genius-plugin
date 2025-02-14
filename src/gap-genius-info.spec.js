@@ -1,12 +1,13 @@
-import ExampleInfo from './gapGenius-info.js';
+import joi from 'joi';
+import GapGeniusInfo from './gap-genius-info.js';
 import { beforeEach, describe, expect, it } from 'vitest';
 import GithubFlavoredMarkdown from '@educandu/educandu/common/github-flavored-markdown.js';
 
-describe('example-info', () => {
+describe('gap-genius-info', () => {
   let sut;
 
   beforeEach(() => {
-    sut = new ExampleInfo(new GithubFlavoredMarkdown());
+    sut = new GapGeniusInfo(new GithubFlavoredMarkdown());
   });
 
   describe('redactContent', () => {
@@ -51,6 +52,72 @@ describe('example-info', () => {
         'cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png',
         'cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png'
       ]);
+    });
+  });
+
+  describe('GapGeniusInfo - validateContent', () => {
+
+    beforeEach(() => {
+      sut = new GapGeniusInfo(new GithubFlavoredMarkdown());
+    });
+  
+    it('should validate correct content without throwing an error', () => {
+      const validContent = {
+        text: 'Example text',
+        width: 50,
+        isEval: true,
+        indices: [1, 2, 3],
+        replacements: { 1: ['replacement1'] }
+      };
+  
+      expect(() => sut.validateContent(validContent)).not.toThrow();
+    });
+  
+    it('should throw an error if width is out of bounds', () => {
+      const invalidContent = {
+        text: 'Example text',
+        width: 150, // Invalid width
+        isEval: true,
+        indices: [1, 2, 3],
+        replacements: { 1: ['replacement1'] }
+      };
+  
+      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
+    });
+  
+    it('should throw an error if text is missing', () => {
+      const invalidContent = {
+        width: 50,
+        isEval: true,
+        indices: [1, 2, 3],
+        replacements: { 1: ['replacement1'] }
+      };
+  
+      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
+    });
+  
+    it('should throw an error if indices contain a non-number', () => {
+      const invalidContent = {
+        text: 'Example text',
+        width: 50,
+        isEval: true,
+        indices: ['not a number'],
+        replacements: { 1: ['replacement1'] }
+      };
+  
+      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
+    });
+  
+    it('should throw an error if replacements keys are not numeric strings', () => {
+      const invalidContent = {
+        text: 'Example text',
+        width: 50,
+        isEval: true,
+        indices: [1, 2, 3],
+        replacements: { notANumber: ['replacement1'] }
+      };
+  
+      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
     });
   });
 });
