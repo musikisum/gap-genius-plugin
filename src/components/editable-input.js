@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
 function EditableInput({ value, onSave }) {
-
+  
   const [editing, setEditing] = useState(false);
-  const [inputValue, setInputValue] = useState(value);
+  const [inputLine, setInputLine] = useState(value.join('; '));
 
   const handleSave = () => {
     setEditing(false);
-    onSave(inputValue); // Speichert den Wert, wenn man speichert
+    onSave(inputLine.split(';').map(word => word.trim()));
   };
 
   return (
@@ -18,8 +18,8 @@ function EditableInput({ value, onSave }) {
       {editing 
         ? <React.Fragment>
           <Input
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
+            value={inputLine}
+            onChange={e => setInputLine(e.target.value)}
             autoFocus
             onPressEnter={handleSave}
             onBlur={handleSave}
@@ -32,14 +32,14 @@ function EditableInput({ value, onSave }) {
             style={{
               cursor: 'pointer',
               display: 'block',
-              flexGrow: 1, // Lässt den Text so breit wie möglich werden
+              flexGrow: 1,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis'
             }}
             onClick={() => setEditing(true)}
             >
-            {inputValue || <div style={{ color: '#aaa' }}>Klicken zum Bearbeiten</div>}
+            {inputLine || <div style={{ color: '#aaa' }}>Klicken zum Bearbeiten</div>}
           </span>
           <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
           </React.Fragment>}

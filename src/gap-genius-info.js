@@ -39,21 +39,19 @@ class GapGeniusInfo {
 
   getDefaultContent() {
     return {
-      text: '',
       width: 100,
-      isEval: true,
+      text: '',
       replacements: {}
     };
   }
 
   validateContent(content) {
     const schema = joi.object({
-      text: joi.string().allow('').required(),
       width: joi.number().min(0).max(100).required(),
-      isEval: joi.bool().required(),
+      text: joi.string().allow('').required(),
       replacements: joi.object().pattern(
-        joi.string().regex(/^\d+$/),
-        joi.array().items(joi.string())
+        joi.string(),
+        joi.array().items(joi.string().optional())
       ).required()
     });
 

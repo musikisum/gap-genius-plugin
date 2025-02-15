@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'antd';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
@@ -10,10 +10,15 @@ import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
 import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider.js';
 
-export default function GaggeniusEditor({ content, onContentChanged }) {
-  
+export default function GapGeniusEditor({ content, onContentChanged }) {
+
+  console.log('content rerender:', content);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
-  
+
+  // Matched the ??-Signs in the content text property
+  const [matchesCount, setMatchesCount] = useState(0);
+  const [isEval, setIsEval] = useState(true);
+
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
   };
@@ -23,32 +28,38 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
   };
 
   const onExampleButtonClick = () => {
-    const replacements = GapGeniusUtils.createNewReplacementObject(content.replacements, GapGeniusUtils.exampleText);
-    updateContent({ text: GapGeniusUtils.exampleText, replacements });
+    const newText = GapGeniusUtils.exampleText;
+    setMatchesCount([...newText.matchAll(/\?\?/g)]);
+    setIsEval(true);
+    const replacements = GapGeniusUtils.createNewReplacementObject(newText, content.replacements);
+    updateContent({ text: newText, replacements });
   };
 
+  // TODO:
   const onTextChange = event => {
     const newText = event.target.value;
-    const count = (newText.match(/\?\?/g) || [])?.length;
-    // eslint-disable-next-line no-undefined
-    const isEval = count !== null && count !== undefined && count % 2 === 0;
-    if (isEval) {
-      // Create a deep Copy of replacements object
-      const replacements = GapGeniusUtils.createNewReplacementObject(content.replacements, newText);
-      updateContent({ isEval, text: newText, replacements });      
-    } else {
-      updateContent({ isEval, text: newText });
+    const matches = [...newText.matchAll(/\?\?/g)].length;
+    console.log('matches:', matches)
+    setMatchesCount(matches);
+    if (matches % 2 === 0) {
+      setIsEval(true);
+      // Problem: alte ReplacementValues gehen hier verloren, weil sich in content.replacement die keys geändert haben 
+      const replacements = GapGeniusUtils.createNewReplacementObject(newText, content.replacements);
+      updateContent({ text: newText, replacements });
+    } else { 
+      setIsEval(false);
+      updateContent({ ... content, text: newText });
     }
   };
 
   const onReplacementsChange = (value, key) => {
-    if (typeof value !== 'string') {
-      return;
-    } 
     const replacementsCopy = cloneDeep(content.replacements);
-    const synonyms = replacementsCopy[key];
-    synonyms.length = 0;
-    synonyms.push(...value.split(/[;]+/).map(word => word.trim()));
+    if (!(key in replacementsCopy)) {
+      replacementsCopy[key] = [];
+    }
+    if(value) {
+      replacementsCopy[key].push(...value);
+    }
     updateContent({ replacements: replacementsCopy });
   };
 
@@ -61,11 +72,11 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
           <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
         </Form.Item>
-        { content.isEval
+        { isEval
           ? Object.entries(content.replacements).map(([key, value]) => {
             return (
-              <Form.Item key={key} label={value[0]} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={value.join('; ')} onSave={event => onReplacementsChange(event, key)} />
+              <Form.Item key={key} label={key.split('_')[0]} {...FORM_ITEM_LAYOUT}>
+                <EditableInput value={value} onSave={event => onReplacementsChange(event, key)} />
               </Form.Item>
             );
           })
@@ -81,6 +92,6 @@ export default function GaggeniusEditor({ content, onContentChanged }) {
   );
 }
 
-GaggeniusEditor.propTypes = {
+GapGeniusEditor.propTypes = {
   ...sectionEditorProps
 };
