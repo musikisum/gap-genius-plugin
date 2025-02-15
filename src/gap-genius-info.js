@@ -41,18 +41,22 @@ class GapGeniusInfo {
     return {
       width: 100,
       text: '',
-      replacements: {}
+      analyseText: false,
+      replacements: []
     };
   }
 
   validateContent(content) {
+    const replacementSchema = joi.object({
+      expression: joi.string().required(),
+      index: joi.number().integer().required(),
+      list: joi.array().items(joi.string().required()).default([]).required()
+    });
     const schema = joi.object({
       width: joi.number().min(0).max(100).required(),
       text: joi.string().allow('').required(),
-      replacements: joi.object().pattern(
-        joi.string(),
-        joi.array().items(joi.string().optional())
-      ).required()
+      analyseText: joi.boolean().required(),
+      replacements: joi.array().items(replacementSchema).required()
     });
 
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });

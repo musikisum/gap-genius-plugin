@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'antd';
+import { Button, Form, Flex } from 'antd';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
-import { FORM_ITEM_LAYOUT } from '@educandu/educandu/domain/constants.js';
 import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
 import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider.js';
+import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educandu/domain/constants.js';
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
   console.log('content rerender:', content);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
-
-  // Matched the ??-Signs in the content text property
-  const [matchesCount, setMatchesCount] = useState(0);
-  const [isEval, setIsEval] = useState(true);
 
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
@@ -28,39 +24,23 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onExampleButtonClick = () => {
-    const newText = GapGeniusUtils.exampleText;
-    setMatchesCount([...newText.matchAll(/\?\?/g)]);
-    setIsEval(true);
-    const replacements = GapGeniusUtils.createNewReplacementObject(newText, content.replacements);
-    updateContent({ text: newText, replacements });
+    const et = GapGeniusUtils.exampleText;
+    const nro = GapGeniusUtils.createNewReplacementObjects(et);
+    updateContent({ text: et, replacements: nro });
   };
 
-  // TODO:
+  const onAnalyseButtonClick = () => {
+    console.log('Analyse button click!');
+  };
+
   const onTextChange = event => {
     const newText = event.target.value;
-    const matches = [...newText.matchAll(/\?\?/g)].length;
-    console.log('matches:', matches)
-    setMatchesCount(matches);
-    if (matches % 2 === 0) {
-      setIsEval(true);
-      // Problem: alte ReplacementValues gehen hier verloren, weil sich in content.replacement die keys geändert haben 
-      const replacements = GapGeniusUtils.createNewReplacementObject(newText, content.replacements);
-      updateContent({ text: newText, replacements });
-    } else { 
-      setIsEval(false);
-      updateContent({ ... content, text: newText });
-    }
+    updateContent({ text: newText });
   };
 
-  const onReplacementsChange = (value, key) => {
-    const replacementsCopy = cloneDeep(content.replacements);
-    if (!(key in replacementsCopy)) {
-      replacementsCopy[key] = [];
-    }
-    if(value) {
-      replacementsCopy[key].push(...value);
-    }
-    updateContent({ replacements: replacementsCopy });
+  const onReplacementsChange = (event, itemIndex) => {
+    console.log('index', event)
+    // updateContent({ replacements: replacementsCopy });
   };
 
   return (
@@ -69,14 +49,17 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
           <MarkdownInput value={content.text} onChange={onTextChange} renderAnchors />
         </Form.Item>
-        <Form.Item label={t('exampleText')} {...FORM_ITEM_LAYOUT}>
-          <Button type="primary" onClick={onExampleButtonClick}>{t('insertText')}</Button>
+        <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
+          <Flex options={['center']} gap='middle'>
+            <Button type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
+            <Button type='primary' onClick={onAnalyseButtonClick}>{content.analyseText ? t('keywordInputMode'): t('textInputMode')}</Button>
+          </Flex>
         </Form.Item>
-        { isEval
-          ? Object.entries(content.replacements).map(([key, value]) => {
+        { !content.analyseText
+          ? content.replacements.map(item => {
             return (
-              <Form.Item key={key} label={key.split('_')[0]} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={value} onSave={event => onReplacementsChange(event, key)} />
+              <Form.Item key={item.index} label={`${item.index}. ${item.list[0]}`} {...FORM_ITEM_LAYOUT}>
+                <EditableInput value={item} onSave={event => onReplacementsChange(event, item.index)} />
               </Form.Item>
             );
           })

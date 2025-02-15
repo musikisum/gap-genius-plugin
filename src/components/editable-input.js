@@ -6,11 +6,12 @@ import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 function EditableInput({ value, onSave }) {
   
   const [editing, setEditing] = useState(false);
-  const [inputLine, setInputLine] = useState(value.join('; '));
+  const [inputLine, setInputLine] = useState(value.list.join('; '));
 
   const handleSave = () => {
     setEditing(false);
-    onSave(inputLine.split(';').map(word => word.trim()));
+    const newList = inputLine.split(';').map(word => word.trim());
+    onSave({...value, list: newList });
   };
 
   return (
@@ -48,12 +49,16 @@ function EditableInput({ value, onSave }) {
 }
 
 EditableInput.propTypes = {
-  value: PropTypes.array,
+  value: PropTypes.shape({
+    index: PropTypes.number.isRequired,
+    expression: PropTypes.string.isRequired,
+    list: PropTypes.arrayOf(PropTypes.string).isRequired
+  }),
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
-  value: [],
+  value: null,
   onSave: null,
 };
 
