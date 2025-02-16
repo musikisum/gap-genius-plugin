@@ -9,8 +9,8 @@ musikisum/educandu-plugin-gap-genius:
     en: Current server time
     de: Test erfolgreich 1!
   gapText:
-    en: Gap text
-    de: Lückentext
+    en: Text with variables
+    de: Text mit Variablen
   exampleText:
     en: Text example
     de: Beispieltext
@@ -18,11 +18,15 @@ musikisum/educandu-plugin-gap-genius:
     en: Insert example text
     de: Beispieltext einfügen
   textInputMode:
-    en: 'Mode: text input'
-    de: 'Modus: Texteingabe'
+    en: 'Mode: text input ↑'
+    de: 'Modus: Texteingabe ↑'
   keywordsInputMode:
-    en: 'Mode: Input synonyms' 
-    de: 'Modus: Synonyme eingeben'  
+    en: 'Mode: Input variables ↓'
+    de: 'Modus: Variablen eingeben ↓'
+  actualizeText:
+    en: Actualize text
+    de: Text aktualisieren
   errorText:
-    en: Bitte geben Sie eine gerade Anzahl von ??-Zeichen an!
-    de: Bitte geben Sie eine gerade Anzahl von ??-Zeichen an! 
+    en: 'Please provide a number of synonyms for the keywords marked in the text:'
+    de: 'Bitte geben Sie für die im Text gekennzeichneten Schlüsselwörter eine Anzahl von Synonymen an:'
+    
