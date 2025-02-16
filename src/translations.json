@@ -25,12 +25,12 @@
       "de": "Beispieltext einfügen"
     },
     "textInputMode": {
-      "en": "Analyse text",
-      "de": "Analysiere Text"
+      "en": "Mode: text input",
+      "de": "Modus: Texteingabe"
     },
-    "keywordInputMode": {
-      "en": "Input synonyms",
-      "de": "Optionen eingeben"
+    "keywordsInputMode": {
+      "en": "Mode: Input synonyms",
+      "de": "Modus: Synonyme eingeben"
     },
     "errorText": {
       "en": "Bitte geben Sie eine gerade Anzahl von ??-Zeichen an!",

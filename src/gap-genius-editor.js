@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Form, Flex } from 'antd';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
@@ -12,7 +12,7 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  console.log('content rerender:', content);
+  const { analyseText, text, width, replacements } = content;
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const updateContent = newContentValues => {
@@ -30,7 +30,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onAnalyseButtonClick = () => {
-    console.log('Analyse button click!');
+    updateContent({ analyseText: !analyseText });
   };
 
   const onTextChange = event => {
@@ -39,7 +39,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onReplacementsChange = (event, itemIndex) => {
-    console.log('index', event)
+    console.log('onReplacementsChange', event, itemIndex)
     // updateContent({ replacements: replacementsCopy });
   };
 
@@ -47,16 +47,18 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     <div className="EP_Educandu_Gapgenius_Editor">
       <Form labelAlign="left">
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
-          <MarkdownInput value={content.text} onChange={onTextChange} renderAnchors />
+          <div style={{ color: 'red !important' }}>
+            <MarkdownInput value={text} onChange={onTextChange} color="red" renderAnchors disabled={analyseText} />
+          </div>
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <Flex options={['center']} gap='middle'>
             <Button type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
-            <Button type='primary' onClick={onAnalyseButtonClick}>{content.analyseText ? t('keywordInputMode'): t('textInputMode')}</Button>
+            <Button type='primary' onClick={onAnalyseButtonClick}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
           </Flex>
         </Form.Item>
-        { !content.analyseText
-          ? content.replacements.map(item => {
+        { !analyseText
+          ? replacements.map(item => {
             return (
               <Form.Item key={item.index} label={`${item.index}. ${item.list[0]}`} {...FORM_ITEM_LAYOUT}>
                 <EditableInput value={item} onSave={event => onReplacementsChange(event, item.index)} />
@@ -68,7 +70,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
           {...FORM_ITEM_LAYOUT}
           >
-          <ObjectWidthSlider value={content.width} onChange={handleWidthChange} />
+          <ObjectWidthSlider value={width} onChange={handleWidthChange} />
         </Form.Item>
       </Form>
     </div>
