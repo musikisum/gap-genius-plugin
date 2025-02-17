@@ -3,15 +3,20 @@ import { Input, Button } from 'antd';
 import React, { useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
-function EditableInput({ value, onSave }) {
+function EditableInput({ value, footnotes, onSave }) {
   
   const [editing, setEditing] = useState(false);
   const [inputLine, setInputLine] = useState(value.list.join('; '));
 
   const handleSave = () => {
     setEditing(false);
-    const newList = inputLine.split(';').map(word => word.trim());
-    onSave({...value, list: newList });
+    const newList = footnotes ? inputLine : inputLine.split(/\s*[;,]\s*/).map(word => word.trim());
+    onSave({ ...value, list: newList });
+  };
+
+  const onSetInputLine = event => {
+    const input = footnotes ? event.target.value : event.target.value.replace(/,/g, '; ');
+    setInputLine(input);
   };
 
   return (
@@ -20,7 +25,7 @@ function EditableInput({ value, onSave }) {
         ? <React.Fragment>
           <Input
             value={inputLine}
-            onChange={e => setInputLine(e.target.value)}
+            onChange={e => onSetInputLine(e)}
             autoFocus
             onPressEnter={handleSave}
             onBlur={handleSave}
@@ -54,11 +59,13 @@ EditableInput.propTypes = {
     expression: PropTypes.string.isRequired,
     list: PropTypes.arrayOf(PropTypes.string).isRequired
   }),
+  footnotes: PropTypes.bool,
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
   value: null,
+  footnotes: false,
   onSave: null,
 };
 

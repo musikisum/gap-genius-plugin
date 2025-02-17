@@ -13,23 +13,34 @@
   // @edu-error-color: #B02E0C;
   .ant-input-outlined.ant-input-disabled,
   .ant-input-outlined[disabled] {
-    color: @edu-error-color !important;
-  }
-
-  .btuttonColorVariables {
-    background-color: @edu-success-color;
-  }
-
-  .btuttonColorText {
-    // noch durch Varaible ersetzen
-    background-color: #6d8bb1;
+    color: #DB6F6F !important;
   }
   
   .messageArea {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
     color: @edu-success-color;
     font-weight: bold;
   }
+
+  .antFlex {
+    max-width: 100%;
+    
+  }
+  
+  .antBtn {
+    width: 30% !important;
+  }
+
+  .antBtn span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .customSwitch {
+    background-color: @edu-primary-color-light !important;
+  }  
+  .customSwitch:hover {
+    background-color: @edu-primary-color-dark !important;
+  }
+
 }

@@ -24,21 +24,37 @@
       "en": "Insert example text",
       "de": "Beispieltext einfügen"
     },
-    "textInputMode": {
-      "en": "Mode: text input ↑",
-      "de": "Modus: Texteingabe ↑"
+    "gameMode": {
+      "en": "→ Gap text",
+      "de": "→ Lückentext"
+    },
+    "switchLabelText": {
+      "en": "Mode",
+      "de": "Modus"
+    },
+    "footNoteMode": {
+      "en": "→ Footnotes",
+      "de": "→ Fußnoten"
     },
     "keywordsInputMode": {
-      "en": "Mode: Input variables ↓",
-      "de": "Modus: Variablen eingeben ↓"
+      "en": "Change variables ↓",
+      "de": "Variablen ändern ↓"
+    },
+    "textInputMode": {
+      "en": "Text input ↑",
+      "de": "Texteingabe ↑"
     },
     "actualizeText": {
       "en": "Actualize text",
       "de": "Text aktualisieren"
     },
-    "errorText": {
-      "en": "Please provide a number of synonyms for the keywords marked in the text:",
-      "de": "Bitte geben Sie für die im Text gekennzeichneten Schlüsselwörter eine Anzahl von Synonymen an:"
+    "inputTextVariables": {
+      "en": "Please provide a number of synonyms for the variables marked in the text:",
+      "de": "Bitte geben Sie für die im Text gekennzeichneten Variablen Synonyme an:"
+    },
+    "inputFootnoteVariables": {
+      "en": "Please provide a value for the footnotes marked in the text:",
+      "de": "Bitte geben Sie für die im Text gekennzeichneten Fußnoten Werte an:"
     }
   }
 }

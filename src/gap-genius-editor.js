@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Flex } from 'antd';
+import { Button, Form, Flex, Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
@@ -12,8 +12,8 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { analyseText, text, width, replacements } = content;
-  console.log('replacements:', replacements)
+  const { width, text, footnotes, analyseText, replacements } = content;
+  console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const updateContent = newContentValues => {
@@ -26,7 +26,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const onExampleButtonClick = () => {
     const et = GapGeniusUtils.exampleText;
-    const nro = GapGeniusUtils.createNewReplacementObjects(et);
+    const nro = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
     updateContent({ text: et, replacements: nro });
   };
 
@@ -36,45 +36,82 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onModusChange = () => {
-    const nro = GapGeniusUtils.createNewReplacementObjects(text);
-    updateContent({ text, analyseText: !analyseText, replacements: nro });
+    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
+    updateContent({ analyseText: !analyseText, replacements: nro });
   };
 
   const onTextSaveChange = () => {
-    const nro = GapGeniusUtils.createNewReplacementObjects(text);
-    const newText = GapGeniusUtils.updateTextWithSynonyms(text, nro);
+    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
+    const newText = GapGeniusUtils.updateTextWithSynonyms(text, nro, footnotes);
     updateContent({ text: newText, replacements: nro });
   };
 
   const onReplacementsChange = item => {
-    const updatedReplacementsCopy = cloneDeep(replacements).map(obj => obj.index === item.index ? { ...obj, list: item.list } : obj);
-    const newText = GapGeniusUtils.updateTextWithSynonyms(text, updatedReplacementsCopy);
-    updateContent({ text: newText, replacements: updatedReplacementsCopy });
+    const replacementCopy = cloneDeep(replacements);
+    replacementCopy[item.index] = item;
+    const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
+    updateContent({ text: newText, replacements: replacementCopy });
+  };
+
+  const onSwitchChange = value => {
+    const replacementCopy = cloneDeep(replacements);
+    if (value) {
+      replacementCopy.map(obj => {
+        obj.list[0] = obj.list.join('; ');
+        obj.list.length = 1; 
+        return obj;
+      });
+    } else {
+      replacementCopy.map(obj => {
+        obj.list = obj.list[0].split(/[,;]\s*/).filter(item => item !== '');
+        return obj;
+      });
+    }
+    console.log(replacementCopy)
+    updateContent({ replacements: replacementCopy, footnotes: value });
   };
 
   return (
     <div className="EP_Educandu_Gap_Genius_Editor">
       <Form labelAlign="left">
+        <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
+          <Switch 
+            className='customSwitch' 
+            checkedChildren={t('gameMode')} 
+            unCheckedChildren={t('footNoteMode')} 
+            onChange={onSwitchChange} 
+            />
+        </Form.Item>
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
-          <MarkdownInput value={text} onChange={onTextChange} renderAnchors disabled={analyseText} className='defaultTextColor' />
+          <MarkdownInput 
+            value={text} 
+            onChange={onTextChange} 
+            disabled={analyseText} 
+            className='defaultTextColor' 
+            renderAnchors 
+            />
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
-          <Flex options={['center']} gap='middle'>
-            <Button type='primary' className={analyseText ? 'btuttonColorVariables' : 'btuttonColorText'} onClick={onModusChange}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            <Button type='primary' onClick={onTextSaveChange}>{t('actualizeText')}</Button>
-            <Button type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
+          <Flex className='antFlex' gap='middle'>
+            <Button className='antBtn' type='primary' onClick={onModusChange}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
+            <Button className='antBtn' type='primary' onClick={onTextSaveChange}>{t('actualizeText')}</Button>
+            <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
           </Flex>
         </Form.Item>
-        { analyseText ? <div className='messageArea' >{t('errorText')}</div> : null }
+        <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
+          { analyseText 
+            ? <div className='messageArea' >{ !footnotes ? t('inputTextVariables') : t('inputFootnoteVariables')}</div> 
+            : null }
+        </Form.Item>
         { analyseText
           ? replacements.map(item => {
             return (
-              <Form.Item key={item.index + 1} label={`${item.index}. ${item.list[0]}`} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={item} onSave={event => onReplacementsChange(event, item.index)} />
+              <Form.Item key={item.index} label={`${item.index + 1}. ${item.expression}`} {...FORM_ITEM_LAYOUT}>
+                <EditableInput value={item} footnotes={footnotes} onSave={event => onReplacementsChange(event, item.index)} />
               </Form.Item>
             );
           })
-          : null}
+          : null }
         <Form.Item
           label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
           {...FORM_ITEM_LAYOUT}

@@ -2,30 +2,34 @@ const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharf
 
 const _regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g;
 
-const createNewReplacementObjects = text => {
+const createNewReplacementObjects = (text, footnotes) => {
   let index = 0;
   const obj = [];
   for (const match of text.matchAll(_regex)) {
     const expression = match.groups.expression;
-    const list = match.groups.list.split(/[;]\s*/).filter(item => item !== '');
-    list.unshift(expression);
-    obj.push({ index, expression, list: [...new Set(list)] });
+    let list;
+    if (!footnotes) {
+      list = match.groups.list.split(/[,;]\s*/).filter(item => item !== '');      
+      list.unshift(expression);
+      list = [...new Set(list)];
+    } else {
+      list = [match.groups.list];
+    }
+    obj.push({ index, expression, list });
     index += 1;
   };
   return obj;
 };
 
-function updateTextWithSynonyms(text, replacements) {
-  if (!text) {
-    return 'Ein interner Fehler ist aufgetreten, Entschuldigung!';
-  }
+function updateTextWithSynonyms(text, replacements, footnotes) {
   let matchIndex = 0;
   return text.replace(_regex, (match, expression) => {
     const replacementObj = replacements[matchIndex];
     matchIndex += 1;
-    return replacementObj && replacementObj.expression === expression 
-      ? `(${expression})(${replacementObj.list.join('; ')})`
-      : match;
+    if (replacementObj && replacementObj.expression === expression) {
+      return !footnotes ? `(${expression})(${replacementObj.list.join('; ')})` : `(${expression})(${replacementObj.list[0]})`;
+    } 
+    return match;     
   });
 }
 
