@@ -5,18 +5,26 @@ import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
 function EditableInput({ value, footnotes, onSave }) {
   
+  const expression = value.expression;
   const [editing, setEditing] = useState(false);
   const [inputLine, setInputLine] = useState(value.list.join('; '));
 
   const handleSave = () => {
     setEditing(false);
-    const newList = footnotes ? inputLine : inputLine.split(/\s*[;,]\s*/).map(word => word.trim());
+    const resultForGaps = inputLine
+      .split(/\s*[;,]\s*/)
+      .map(word => word.trim())
+      .filter(word => word);
+    const newList = footnotes ? [inputLine] : resultForGaps;
     onSave({ ...value, list: newList });
   };
 
   const onSetInputLine = event => {
-    const input = footnotes ? event.target.value : event.target.value.replace(/,/g, '; ');
-    setInputLine(input);
+    let line = event.target.value.trim();
+    if (!footnotes && !line.startsWith(expression)) {
+      line = `${expression}; ${line}`;
+    }
+    setInputLine(line);
   };
 
   return (

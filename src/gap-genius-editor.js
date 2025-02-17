@@ -46,9 +46,9 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: newText, replacements: nro });
   };
 
-  const onReplacementsChange = item => {
+  const onReplacementsChange = (item, itemIndex) => {
     const replacementCopy = cloneDeep(replacements);
-    replacementCopy[item.index] = item;
+    replacementCopy[itemIndex] = item;
     const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy });
   };
@@ -107,7 +107,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           ? replacements.map(item => {
             return (
               <Form.Item key={item.index} label={`${item.index + 1}. ${item.expression}`} {...FORM_ITEM_LAYOUT}>
-                <EditableInput value={item} footnotes={footnotes} onSave={event => onReplacementsChange(event, item.index)} />
+                <EditableInput expression={item.expression} value={item} footnotes={footnotes} onSave={e => onReplacementsChange(e, item.index)} />
               </Form.Item>
             );
           })

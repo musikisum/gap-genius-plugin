@@ -63,10 +63,11 @@ describe('gap-genius-info', () => {
   
     it('should validate correct content without throwing an error', () => {
       const validContent = {
+        width: 60,
         text: 'Example text',
-        width: 50,
-        isEval: true,
-        replacements: { 1: ['replacement1'] }
+        footnotes: false,
+        analyseText: false,
+        replacements: [{ index: 0, expression: 'Akkord', list: ['dur', 'moll'] }]
       };
   
       expect(() => sut.validateContent(validContent)).not.toThrow();
@@ -74,10 +75,11 @@ describe('gap-genius-info', () => {
   
     it('should throw an error if width is out of bounds', () => {
       const invalidContent = {
+        width: 60,
         text: 'Example text',
-        width: 150, // Invalid width
-        isEval: true,
-        replacements: { 1: ['replacement1'] }
+        footnotes: false,
+        analyseText: false,
+        replacements: [{ index: 0, expression: 'Akkord', list: 3 }]
       };
   
       expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
@@ -85,31 +87,11 @@ describe('gap-genius-info', () => {
   
     it('should throw an error if text is missing', () => {
       const invalidContent = {
-        width: 50,
-        isEval: true,
-        replacements: { 1: ['replacement1'] }
-      };
-  
-      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
-    });
-  
-    it('should throw an error if indices contain a non-number', () => {
-      const invalidContent = {
-        text: 'Example text',
-        width: 50,
-        isEval: true,
-        replacements: { 1: ['replacement1'] }
-      };
-  
-      expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
-    });
-  
-    it('should throw an error if replacements keys are not numeric strings', () => {
-      const invalidContent = {
-        text: 'Example text',
-        width: 50,
-        isEval: true,
-        replacements: { notANumber: ['replacement1'] }
+        width: 60,
+        text: null,
+        footnotes: false,
+        analyseText: false,
+        replacements: [{ index: 0, expression: 'Akkord', list: ['dur', 'moll'] }]
       };
   
       expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);

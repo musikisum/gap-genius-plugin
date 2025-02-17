@@ -9,8 +9,10 @@ const createNewReplacementObjects = (text, footnotes) => {
     const expression = match.groups.expression;
     let list;
     if (!footnotes) {
-      list = match.groups.list.split(/[,;]\s*/).filter(item => item !== '');      
-      list.unshift(expression);
+      list = match.groups.list.split(/[,;]\s*/).filter(item => item !== ''); 
+      if (list[0] !== expression) {
+        list.unshift(expression);
+      }
       list = [...new Set(list)];
     } else {
       list = [match.groups.list];
