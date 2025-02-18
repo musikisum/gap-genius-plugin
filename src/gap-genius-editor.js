@@ -61,7 +61,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     replacementCopy = hasFootnotes 
       ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footenoteErrorText')) 
       : GapGeniusUtils.createGapGameReplacements(replacementCopy, t('footenoteErrorText')); 
-    const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
+    const newText = GapGeniusUtils.updateText(text, replacementCopy, hasFootnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
 

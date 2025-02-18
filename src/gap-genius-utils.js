@@ -87,17 +87,17 @@ const createInputfromList = (index, exp, list, footnotes, footenoteErrorText) =>
 };
 
 // Update text from replacements
-function updateText(text, replacements, footnotes) {
+function updateText(text, replacements, hasFootnotes) {
   let matchIndex = 0;
-  return text.replace(_regex, (match, expression, existingValue) => {
+  return text.replace(_regex, (match, expression) => {
     const replacementObj = replacements[matchIndex];
     matchIndex += 1;
     if (replacementObj && replacementObj.expression === expression) {
-      const returnValue = footnotes ? replacementObj.list[0] : replacementObj.list.join('; ');
-      if (existingValue) {
-        return `(${expression})(${returnValue})`;
-      }
-      return `(${expression})(${returnValue})`;
+      const inputValue = hasFootnotes ? replacementObj.list[0] : replacementObj.list.join('; ');
+      if (hasFootnotes) {
+        return `(${expression})(${inputValue})`;
+      } // !footnotes
+      return inputValue.startsWith(expression) ? `(${expression})(${inputValue})` : `(${expression})(${expression}; ${inputValue})`;
     }
     return match;
   });
