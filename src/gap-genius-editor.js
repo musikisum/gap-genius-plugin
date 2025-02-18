@@ -34,9 +34,9 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: event.target.value });
   };
 
-  const onTextSaveChange = () => {
+  const onTextUpdateChange = () => {
     const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    const newText = GapGeniusUtils.updateTextWithSynonyms(text, nro, footnotes);
+    const newText = GapGeniusUtils.updateText(text, nro, footnotes);
     updateContent({ text: newText, replacements: nro });
   };
 
@@ -52,18 +52,16 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
       ...item, 
       list: GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes)
     };
-    const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
+    const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
   const onSwitchChange = hasFootnotes => {
     let replacementCopy = cloneDeep(replacements);
-    if (hasFootnotes) {
-      replacementCopy = GapGeniusUtils.createFootnoteList(replacementCopy);
-    } else {
-      replacementCopy = GapGeniusUtils.createGapGameList(replacementCopy);
-    }
-    const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
+    replacementCopy = hasFootnotes 
+      ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footenoteErrorText')) 
+      : GapGeniusUtils.createGapGameReplacements(replacementCopy, t('footenoteErrorText')); 
+    const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
 
@@ -90,7 +88,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <Flex className='antFlex' gap='middle'>
             <Button className='antBtn' type='primary' onClick={onModusChange}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            <Button className='antBtn' type='primary' onClick={onTextSaveChange}>{t('actualizeText')}</Button>
+            <Button className='antBtn' type='primary' onClick={onTextUpdateChange}>{t('actualizeText')}</Button>
             <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
           </Flex>
         </Form.Item>
@@ -105,7 +103,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
               <Form.Item key={item.index} label={`${item.index + 1}. ${item.expression}`} {...FORM_ITEM_LAYOUT}>
                 <EditableInput 
                   index={item.index}
-                  line={GapGeniusUtils.createInputfromList(item.list, item.expression, footnotes)}
+                  line={GapGeniusUtils.createInputfromList(item.index, item.expression, item.list, footnotes, t('footenoteErrorText'))}
                   expression={item.expression}
                   footnotes={footnotes}
                   onSave={e => onReplacementsChange(e, item.index)} 

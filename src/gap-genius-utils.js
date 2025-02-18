@@ -1,9 +1,20 @@
-import { useTranslation } from 'react-i18next';
-
+// Text for exemplification, hwo does the plugin work 
 const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definitionen ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(zwei) Töne als Akkord hören, (drei)() Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (C)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten) anzukämpfen?';
-  
+
+// Regex to match the marks on an expression with synonyms or a footnote 
 const _regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g;
 
+// Replace the default text in footnote mode for empty inputs
+const _getRegexReplaceFootnoteDefaultText = translation => {
+  return new RegExp(`(?:;\\s*)?\\d+\\.\\s*${translation}\\s*`, 'g');
+};
+
+// Replace expressions in footnode mode
+const _getRegexReplaceExpressionText = exp => {
+  return new RegExp(`^${exp}(\\s*;\\s*)?`);
+};
+
+// Create an replacement object with index, espression and list properties from text 
 const createNewReplacementObjects = (text, footnotes) => {
   let index = 0;
   const obj = [];
@@ -25,58 +36,74 @@ const createNewReplacementObjects = (text, footnotes) => {
   return obj;
 };
 
-function updateTextWithSynonyms(text, replacements, footnotes) {
-  let matchIndex = 0;
-  return text.replace(_regex, (match, expression) => {
-    const replacementObj = replacements[matchIndex];
-    matchIndex += 1;
-    if (replacementObj && replacementObj.expression === expression) {
-      return !footnotes ? `(${expression})(${replacementObj.list.join('; ')})` : `(${expression})(${replacementObj.list[0]})`;
-    } 
-    return match;     
-  });
-}
-
-const createFootnoteList = replacements => {
+// Update lists in replacements for footnote mode 
+const createFootnoteReplacements = (replacements, footenoteErrorText) => {
   return replacements.map(obj => {
-    obj.list[0] = obj.list.join('; ');
+    let tempValue = obj.list.join('; ');
+    tempValue = tempValue.replace(_getRegexReplaceExpressionText(obj.expression), '');
+    if (tempValue.length === 0) {
+      tempValue = `${obj.index + 1}. ${footenoteErrorText}`;
+    }
+    obj.list[0] = tempValue;
     obj.list.length = 1; 
     return obj;
   });
 };
 
-const createGapGameList = replacements => {
+// Update lists in replacements for game mode
+const createGapGameReplacements = (replacements, footenoteErrorText) => {
   return replacements.map(obj => {
     if (!obj.list.length) {
       return obj;
     }
-    const newList = String(obj.list[0])
+    let valueIndex0 = obj.list[0];
+    valueIndex0 = valueIndex0.replace(_getRegexReplaceFootnoteDefaultText(footenoteErrorText), '');
+    const newList = valueIndex0
       .split(/[,;]\s*/)
       .map(item => item.trim())
       .filter(item => item.length > 0);
     if (newList[0]?.toLowerCase() !== obj.expression.toLowerCase()) {
       newList.unshift(obj.expression);
     }
-    const resultObj = { ...obj, list: newList };
-    return resultObj;
+    return { ...obj, list: newList };
   });
 };
 
-const createInputfromList = (list, expression, footnotes) => {
+// Create text for the input copmponent
+const createInputfromList = (index, exp, list, footnotes, footenoteErrorText) => {
+  const footnoteDefaultValue = `${index + 1}. ${footenoteErrorText}`;
   if (list.length === 0) {
-    return '';
+    return footnotes ? footnoteDefaultValue : exp;
   } 
-  const hasExpression = list[0] === expression;
   if (footnotes) {
     if (list.length === 1) {
-      return hasExpression ? '' : list[0];
+      return list[0] === exp ? footnoteDefaultValue : list[0];
     } 
-    return hasExpression ? list.slice(1).join(' ') : list.join(' ');  
+    return list[0] === exp ? list.slice(1).join(' ') : list.join(' ');  
   } 
-  const logValue = [expression, ...list].join('; '); 
-  return hasExpression ? list.join('; ') : logValue;  
+  let inputLine = [...new Set(list)].join('; ');
+  inputLine = inputLine.replace(_getRegexReplaceFootnoteDefaultText(footenoteErrorText));
+  return inputLine;
 };
 
+// Update text from replacements
+function updateText(text, replacements, footnotes) {
+  let matchIndex = 0;
+  return text.replace(_regex, (match, expression, existingValue) => {
+    const replacementObj = replacements[matchIndex];
+    matchIndex += 1;
+    if (replacementObj && replacementObj.expression === expression) {
+      const returnValue = footnotes ? replacementObj.list[0] : replacementObj.list.join('; ');
+      if (existingValue) {
+        return `(${expression})(${returnValue})`;
+      }
+      return `(${expression})(${returnValue})`;
+    }
+    return match;
+  });
+};
+
+// Update replacements after change of input field
 const createListFromInputLine = (inputLine, expression, footnotes) => {
   if (!inputLine) {
     return [];
@@ -94,25 +121,14 @@ const createListFromInputLine = (inputLine, expression, footnotes) => {
   return resultForGaps;   
 };
 
-const adjustLine = (value, footnotes, index, expression, errorText) => {
-  let lineToAdjust = value;
-  if(footnotes) {
-    lineToAdjust = lineToAdjust === '' ? `${index + 1}. ${errorText}` : lineToAdjust;
-  } else {
-    lineToAdjust = lineToAdjust?.startsWith(expression) ? lineToAdjust : `${expression}; ${lineToAdjust}`;
-  }
-  return lineToAdjust;
-};
-
 const GapGeniusUtils = {
   exampleText,
-  updateTextWithSynonyms,
+  updateText,
   createNewReplacementObjects,
   createListFromInputLine,
   createInputfromList,
-  createFootnoteList,
-  createGapGameList,
-  adjustLine
+  createFootnoteReplacements,
+  createGapGameReplacements
 };
 
 export default GapGeniusUtils;

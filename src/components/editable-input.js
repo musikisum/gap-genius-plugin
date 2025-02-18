@@ -1,22 +1,23 @@
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import GapGeniusUtils from '../gap-genius-utils.js';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
-function EditableInput({ index, line, expression, footnotes, onSave }) {
+function EditableInput({ line, onSave }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const [editing, setEditing] = useState(false);
-  const [inputLine, setInputLine] = useState(line);
+  const [inputLine, setInputLine] = useState();
 
-
+  useEffect(() => {
+    setInputLine(line);
+  }, [line]);
 
   const handleSave = () => {
     setEditing(false);    
-    onSave(GapGeniusUtils.adjustLine(inputLine, footnotes, index, expression, t('footenoteErrorText')));
+    onSave(inputLine);
   };
 
   return (
