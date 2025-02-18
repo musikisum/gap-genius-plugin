@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Form, Flex, Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { Button, Form, Flex, Switch } from 'antd';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
@@ -26,18 +26,12 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const onExampleButtonClick = () => {
     const et = GapGeniusUtils.exampleText;
-    const nro = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
-    updateContent({ text: et, replacements: nro });
+    const nros = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
+    updateContent({ text: et, replacements: nros });
   };
 
   const onTextChange = event => {
-    const newText = event.target.value;
-    updateContent({ text: newText });
-  };
-
-  const onModusChange = () => {
-    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    updateContent({ analyseText: !analyseText, replacements: nro });
+    updateContent({ text: event.target.value });
   };
 
   const onTextSaveChange = () => {
@@ -46,29 +40,31 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: newText, replacements: nro });
   };
 
-  const onReplacementsChange = (item, itemIndex) => {
+  const onModusChange = () => {
+    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
+    updateContent({ analyseText: !analyseText, replacements: nro });
+  };
+
+  const onReplacementsChange = (inputLine, itemIndex) => {
     const replacementCopy = cloneDeep(replacements);
-    replacementCopy[itemIndex] = item;
+    const item = replacementCopy[itemIndex];
+    replacementCopy[itemIndex] = { 
+      ...item, 
+      list: GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes)
+    };
     const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
-  const onSwitchChange = value => {
-    const replacementCopy = cloneDeep(replacements);
-    if (value) {
-      replacementCopy.map(obj => {
-        obj.list[0] = obj.list.join('; ');
-        obj.list.length = 1; 
-        return obj;
-      });
+  const onSwitchChange = hasFootnotes => {
+    let replacementCopy = cloneDeep(replacements);
+    if (hasFootnotes) {
+      replacementCopy = GapGeniusUtils.createFootnoteList(replacementCopy);
     } else {
-      replacementCopy.map(obj => {
-        obj.list = obj.list[0].split(/[,;]\s*/).filter(item => item !== '');
-        return obj;
-      });
+      replacementCopy = GapGeniusUtils.createGapGameList(replacementCopy);
     }
-    console.log(replacementCopy)
-    updateContent({ replacements: replacementCopy, footnotes: value });
+    const newText = GapGeniusUtils.updateTextWithSynonyms(text, replacementCopy, footnotes);
+    updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
 
   return (
@@ -107,7 +103,13 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           ? replacements.map(item => {
             return (
               <Form.Item key={item.index} label={`${item.index + 1}. ${item.expression}`} {...FORM_ITEM_LAYOUT}>
-                <EditableInput expression={item.expression} value={item} footnotes={footnotes} onSave={e => onReplacementsChange(e, item.index)} />
+                <EditableInput 
+                  index={item.index}
+                  line={GapGeniusUtils.createInputfromList(item.list, item.expression, footnotes)}
+                  expression={item.expression}
+                  footnotes={footnotes}
+                  onSave={e => onReplacementsChange(e, item.index)} 
+                  />
               </Form.Item>
             );
           })

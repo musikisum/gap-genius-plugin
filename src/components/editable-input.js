@@ -1,30 +1,22 @@
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import GapGeniusUtils from '../gap-genius-utils.js';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
-function EditableInput({ value, footnotes, onSave }) {
-  
-  const expression = value.expression;
+function EditableInput({ index, line, expression, footnotes, onSave }) {
+
+  const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
+
   const [editing, setEditing] = useState(false);
-  const [inputLine, setInputLine] = useState(value.list.join('; '));
+  const [inputLine, setInputLine] = useState(line);
+
+
 
   const handleSave = () => {
-    setEditing(false);
-    const resultForGaps = inputLine
-      .split(/\s*[;,]\s*/)
-      .map(word => word.trim())
-      .filter(word => word);
-    const newList = footnotes ? [inputLine] : resultForGaps;
-    onSave({ ...value, list: newList });
-  };
-
-  const onSetInputLine = event => {
-    let line = event.target.value.trim();
-    if (!footnotes && !line.startsWith(expression)) {
-      line = `${expression}; ${line}`;
-    }
-    setInputLine(line);
+    setEditing(false);    
+    onSave(GapGeniusUtils.adjustLine(inputLine, footnotes, index, expression, t('footenoteErrorText')));
   };
 
   return (
@@ -33,7 +25,7 @@ function EditableInput({ value, footnotes, onSave }) {
         ? <React.Fragment>
           <Input
             value={inputLine}
-            onChange={e => onSetInputLine(e)}
+            onChange={e => setInputLine(e.target.value)}
             autoFocus
             onPressEnter={handleSave}
             onBlur={handleSave}
@@ -62,17 +54,17 @@ function EditableInput({ value, footnotes, onSave }) {
 }
 
 EditableInput.propTypes = {
-  value: PropTypes.shape({
-    index: PropTypes.number.isRequired,
-    expression: PropTypes.string.isRequired,
-    list: PropTypes.arrayOf(PropTypes.string).isRequired
-  }),
+  index: PropTypes.number,
+  line: PropTypes.string,
+  expression: PropTypes.string,
   footnotes: PropTypes.bool,
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
-  value: null,
+  index: null,
+  line: null,
+  expression: null,
   footnotes: false,
   onSave: null,
 };

@@ -36,6 +36,10 @@
       "en": "→ Footnotes",
       "de": "→ Fußnoten"
     },
+    "footenoteErrorText": {
+      "en": "empty footnote",
+      "de": "leere Fußnote"
+    },
     "keywordsInputMode": {
       "en": "Change variables ↓",
       "de": "Variablen ändern ↓"
