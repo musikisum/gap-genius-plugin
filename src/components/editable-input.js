@@ -55,18 +55,12 @@ function EditableInput({ line, onSave }) {
 }
 
 EditableInput.propTypes = {
-  index: PropTypes.number,
   line: PropTypes.string,
-  expression: PropTypes.string,
-  footnotes: PropTypes.bool,
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
-  index: null,
   line: null,
-  expression: null,
-  footnotes: false,
   onSave: null,
 };
 
