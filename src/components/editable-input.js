@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
-import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
 function EditableInput({ line, onSave }) {

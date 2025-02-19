@@ -3,7 +3,6 @@ import path from 'node:path';
 import parseBool from 'parseboolean';
 import educandu from '@educandu/educandu';
 import customResolvers from './custom-resolvers.js';
-import ExampleController from '../../src/gap-genius-controller.js';
 
 const thisDir = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -34,7 +33,7 @@ const config = {
     }
   ],
   resources: [path.resolve(thisDir, '../../src/translations.json')],
-  additionalControllers: [ExampleController],
+  additionalControllers: [],
   sessionSecret: process.env.TEST_APP_SESSION_SECRET,
   sessionCookieDomain: process.env.TEST_APP_SESSION_COOKIE_DOMAIN,
   sessionCookieName: process.env.TEST_APP_SESSION_COOKIE_NAME,

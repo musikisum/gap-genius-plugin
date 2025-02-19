@@ -13,7 +13,7 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const { width, text, footnotes, analyseText, replacements } = content;
-  console.log('replacements:', replacements);
+  // console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const updateContent = newContentValues => {
@@ -100,20 +100,25 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         { analyseText
           ? replacements.map(item => {
             return (
-              <Form.Item key={item.index} label={`${item.index + 1}. ${item.expression}`} {...FORM_ITEM_LAYOUT}>
+              <Form.Item
+                key={item.index}
+                label={`${item.index + 1}. ${item.expression}`}
+                {...FORM_ITEM_LAYOUT}
+                >
                 <EditableInput 
                   index={item.index}
                   line={GapGeniusUtils.createInputfromList(item.index, item.expression, item.list, footnotes, t('footenoteErrorText'))}
                   expression={item.expression}
                   footnotes={footnotes}
-                  onSave={e => onReplacementsChange(e, item.index)} 
+                  onSave={e => onReplacementsChange(e, item.index)}
+                  classname='editable-input'
                   />
               </Form.Item>
             );
           })
           : null }
         <Form.Item
-          label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>}
+          label={<Info tooltip={t('common:widthInfo')}>{t('common:width')}</Info>} 
           {...FORM_ITEM_LAYOUT}
           >
           <ObjectWidthSlider value={width} onChange={handleWidthChange} />

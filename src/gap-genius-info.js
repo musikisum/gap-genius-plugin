@@ -11,8 +11,6 @@ class GapGeniusInfo {
 
   static typeName = 'musikisum/educandu-plugin-gap-genius';
 
-  allowsInput = true;
-
   constructor(gfm) {
     this.gfm = gfm;
   }
