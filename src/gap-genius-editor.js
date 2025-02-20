@@ -13,6 +13,8 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const { width, text, footnotes, analyseText, replacements } = content;
+  console.log('footnotes:', footnotes)
+
   // console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
@@ -70,7 +72,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
       <Form labelAlign="left">
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
           <Switch 
-            className='customSwitch' 
+            className='customSwitch'
+            checked={footnotes}
             checkedChildren={t('gameMode')} 
             unCheckedChildren={t('footNoteMode')} 
             onChange={onSwitchChange} 

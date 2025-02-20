@@ -37,11 +37,17 @@
     text-overflow: ellipsis !important;
   }
 
-  .editable-input-container {
-    
+  .text-editable-input  { 
+    flex-grow: 1;
   }
 
-  .editable-input  { }
+  .text-editable-input-display {
+    cursor: pointer;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
 
   .customSwitch {
     background-color: @edu-primary-color-light !important;

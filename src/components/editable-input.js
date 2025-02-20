@@ -25,29 +25,22 @@ function EditableInput({ line, onSave }) {
       {editing 
         ? <React.Fragment>
           <Input
+            className='text-editable-input'
             value={inputLine}
-            onChange={e => setInputLine(e.target.value)}
             autoFocus
+            onChange={e => setInputLine(e.target.value)}
             onPressEnter={handleSave}
             onBlur={handleSave}
-            style={{ flexGrow: 1 }}
             />
           <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
           </React.Fragment>
         : <React.Fragment>
-          <span
-            style={{
-              cursor: 'pointer',
-              display: 'block',
-              flexGrow: 1,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
+          <div
+            className='text-editable-input-display'
             onClick={() => setEditing(true)}
             >
             {inputLine || <div style={{ color: '#aaa' }}>Klicken zum Bearbeiten</div>}
-          </span>
+          </div>
           <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
           </React.Fragment>}
     </div>

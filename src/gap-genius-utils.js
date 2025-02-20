@@ -93,9 +93,6 @@ function updateText(text, replacements, hasFootnotes) {
   return text.replace(_regex, (match, expression) => {
     const replacementObj = replacements[matchIndex];
     matchIndex += 1;
-    console.log('replacementObj:', replacementObj)
-    console.log('match', match)
-    console.log('expression', expression)
     if (replacementObj && replacementObj.expression === expression) {
       const inputValue = hasFootnotes ? replacementObj.list[0] : replacementObj.list.join('; ');
       if (hasFootnotes) {
