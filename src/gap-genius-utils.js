@@ -2,8 +2,8 @@
 const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definitionen ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(zwei) Töne als Akkord hören, (drei)() Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (C)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten) anzukämpfen?';
 
 // Regex to match the marks on an expression with synonyms or a footnote 
-// const _regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g;
-const _regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*?(?:\[[^\]]+\]\([^)]+\))?[^()]*)\)/g;
+// const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g;
+const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*?(?:\[[^\]]+\]\([^)]+\))?[^()]*)\)/g;
 
 // Replace the default text in footnote mode for empty inputs
 const _getRegexReplaceFootnoteDefaultText = translation => {
@@ -19,7 +19,7 @@ const _getRegexReplaceExpressionText = exp => {
 const createNewReplacementObjects = (text, footnotes) => {
   let index = 0;
   const obj = [];
-  for (const match of text.matchAll(_regex)) {
+  for (const match of text.matchAll(regex)) {
     const expression = match.groups.expression;
     let list;
     if (!footnotes) {
@@ -90,7 +90,7 @@ const createInputfromList = (index, exp, list, footnotes, footenoteErrorText) =>
 // Update text from replacements
 function updateText(text, replacements, hasFootnotes) {
   let matchIndex = 0;
-  return text.replace(_regex, (match, expression) => {
+  return text.replace(regex, (match, expression) => {
     const replacementObj = replacements[matchIndex];
     matchIndex += 1;
     if (replacementObj && replacementObj.expression === expression) {
@@ -123,6 +123,7 @@ const createListFromInputLine = (inputLine, expression, footnotes) => {
 };
 
 const GapGeniusUtils = {
+  regex,
   exampleText,
   updateText,
   createNewReplacementObjects,

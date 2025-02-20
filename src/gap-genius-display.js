@@ -7,11 +7,9 @@ export default function GapGeniusDisplay({ content }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
-  return (
-    <div className="EP_Educandu_Gap_Genius_Display">
-      <FootnoteText content={content} />
-    </div>
-  );
+  return content.footnotes
+    ? <div className="EP_Educandu_Gap_Genius_Display"><FootnoteText content={content} /></div>
+    : <div>Für den Gaptext-Modus gibt es noch keine Anzeige ...</div>;
 }
 
 GapGeniusDisplay.propTypes = {
