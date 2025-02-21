@@ -6,9 +6,8 @@ import Markdown from '@educandu/educandu/components/markdown.js';
 
 function FootnoteText({ content }) {
 
-  const { width } = content;
+  const { width, text } = content;
 
-  const { text } = content;
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const createFootnotesText = () => {
