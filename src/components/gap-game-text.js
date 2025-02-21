@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import GapGameTextInput from './gap-game-text-input.js';
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
