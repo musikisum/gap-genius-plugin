@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { Button } from 'antd';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from 'react';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import GapGameTextInput from './gap-game-text-input.js';
+
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 
 function GapGameText({ content }) {
 
+  const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
+
   const { width, text, replacements } = content;
   const [tester, setTester] = useState();
+  const [evaluate, setEvaluate] = useState(false);
 
   useEffect(() => {
     const obj = replacements.reduce((akku, item) => {
@@ -41,9 +47,21 @@ function GapGameText({ content }) {
     return elements;
   };
 
+  const onEvaluateButtonClick = () => {
+    setEvaluate(!evaluate);
+  };
+
   return (
-    <div className={`u-horizontally-centered u-width-${width} gaptext-content`}> 
-      { createGapGameText() }
+    <div className={`u-horizontally-centered u-width-${width}`}>
+      <div className='gaptext-content'> 
+        { createGapGameText() }
+      </div>
+      <div className='gaptext-button-area'>
+        <Button type='primary' onClick={onEvaluateButtonClick}>{!evaluate ? t('checkResult') : t('hideResult')}</Button>
+      </div>
+      { evaluate 
+        ? <div className='gaptext-evaluation-area' /> 
+        : null}
     </div>
   );
 

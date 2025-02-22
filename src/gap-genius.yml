@@ -44,4 +44,10 @@ musikisum/educandu-plugin-gap-genius:
   inputFootnoteVariables:
     en: 'Please provide a value for the footnotes marked in the text:'
     de: 'Bitte geben Sie für die im Text gekennzeichneten Fußnoten Werte an:'
+  checkResult:
+    en: Check inputs
+    de: Eingaben überprüfen
+  hideResult:
+    en: Hide Result
+    de: Ergebnis ausblenden
     
