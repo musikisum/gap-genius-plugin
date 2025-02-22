@@ -13,7 +13,6 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const { width, text, footnotes, analyseText, replacements } = content;
-  console.log('footnotes:', footnotes)
 
   // console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
