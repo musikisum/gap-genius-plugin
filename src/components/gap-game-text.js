@@ -54,10 +54,10 @@ function GapGameText({ content }) {
     setEvaluate(!evaluate);
     const res = [];
     if (!evaluate) {      
-      for (let index = 0; index < replacements.length; index += 1) {
+      for (let index = 0; index < Object.keys(tester).length; index += 1) {
         const test = tester[index];
-        const result = GapManager.getFuseMatch(test);
-        res.push(result);   
+        const match = GapManager.getFuseMatch(test);
+        res.push(match);   
       } 
       setResults(res);     
     }

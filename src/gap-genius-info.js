@@ -40,7 +40,6 @@ class GapGeniusInfo {
       width: 100,
       text: '',
       footnotes: false,
-      analyseText: false,
       replacements: []
     };
   }
@@ -55,7 +54,6 @@ class GapGeniusInfo {
       width: joi.number().min(0).max(100).required(),
       text: joi.string().allow('').required(),
       footnotes: joi.boolean().required(),
-      analyseText: joi.boolean().required(),
       replacements: joi.array().items(replacementSchema).required()
     });
 

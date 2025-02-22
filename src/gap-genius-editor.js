@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form, Flex, Switch } from 'antd';
 import GapGeniusUtils from './gap-genius-utils.js';
@@ -12,7 +12,8 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { width, text, footnotes, analyseText, replacements } = content;
+  const { width, text, footnotes, replacements } = content;
+  const [analyseText, setAnalyseText] = useState(false);
 
   // console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
@@ -43,15 +44,20 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const onModusChange = () => {
     const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    updateContent({ analyseText: !analyseText, replacements: nro });
+    setAnalyseText(!analyseText);
+    updateContent({ replacements: nro });
   };
 
   const onReplacementsChange = (inputLine, itemIndex) => {
     const replacementCopy = cloneDeep(replacements);
     const item = replacementCopy[itemIndex];
+    const tempList = GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes);
+    if (!footnotes && tempList.length === 0) {
+      tempList.push(item.expression);
+    }
     replacementCopy[itemIndex] = { 
       ...item, 
-      list: GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes)
+      list: tempList
     };
     const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy });
@@ -90,7 +96,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <Flex className='antFlex' gap='middle'>
             <Button className='antBtn' type='primary' onClick={onModusChange}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            <Button className='antBtn' type='primary' onClick={onTextUpdateChange}>{t('actualizeText')}</Button>
+            <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={analyseText}>{t('actualizeText')}</Button>
             <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
           </Flex>
         </Form.Item>
@@ -107,7 +113,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
                 label={`${item.index + 1}. ${item.expression}`}
                 {...FORM_ITEM_LAYOUT}
                 >
-                <EditableInput 
+                <EditableInput
                   index={item.index}
                   line={GapGeniusUtils.createInputfromList(item.index, item.expression, item.list, footnotes, t('footenoteErrorText'))}
                   expression={item.expression}

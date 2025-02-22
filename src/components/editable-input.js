@@ -4,20 +4,28 @@ import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
-function EditableInput({ line, onSave }) {
+function EditableInput({ index, line, expression, footnotes, onSave }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const [editing, setEditing] = useState(false);
   const [inputLine, setInputLine] = useState();
 
-  useEffect(() => {
+  useEffect(() => {    
     setInputLine(line);
   }, [line]);
 
   const handleSave = () => {
-    setEditing(false);    
-    onSave(inputLine);
+    setEditing(false);
+    let temp = inputLine;
+    if (!footnotes && !temp) {
+      temp = expression;
+    } 
+    if (footnotes && !temp) {
+      temp = `${index+1}. ${t('footenoteErrorText')}`;
+    }
+    setInputLine(temp);
+    onSave(temp);
   };
 
   return (
@@ -49,11 +57,15 @@ function EditableInput({ line, onSave }) {
 
 EditableInput.propTypes = {
   line: PropTypes.string,
+  expression: PropTypes.string,
+  footnotes: PropTypes.bool,
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
   line: null,
+  expression: null,
+  footnotes: false,
   onSave: null,
 };
 
