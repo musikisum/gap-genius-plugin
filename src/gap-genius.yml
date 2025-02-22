@@ -47,6 +47,9 @@ musikisum/educandu-plugin-gap-genius:
   checkResult:
     en: Check inputs
     de: Eingaben überprüfen
+  refreshResult:
+    en: Refresh result
+    de: Ergebnis aktualisieren
   hideResult:
     en: Hide Result
     de: Ergebnis ausblenden

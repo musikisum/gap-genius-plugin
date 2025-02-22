@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import PropTypes from 'prop-types';
 import GapManager from '../gap-manager.js';
 import { useTranslation } from 'react-i18next';
+import GapResultTable from './gap-result-table.js';
 import React, { useState, useEffect } from 'react';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import GapGameTextInput from './gap-game-text-input.js';
@@ -52,15 +53,14 @@ function GapGameText({ content }) {
 
   const onEvaluateButtonClick = () => {    
     setEvaluate(!evaluate);
-    const res = [];
-    if (!evaluate) {      
-      for (let index = 0; index < Object.keys(tester).length; index += 1) {
-        const test = tester[index];
-        const match = GapManager.getFuseMatch(test);
-        res.push(match);   
-      } 
-      setResults(res);     
+    if (!evaluate) {
+      setResults(GapManager.refreshResults(tester));
     }
+  };
+
+  const onRefreshButtonClick = () => {
+    const newResults = GapManager.refreshResults(tester);
+    setResults(newResults);
   };
 
   return (
@@ -70,44 +70,13 @@ function GapGameText({ content }) {
       </div>
       <div className='gaptext-button-area'>
         <Button type='primary' onClick={onEvaluateButtonClick}>{!evaluate ? t('checkResult') : t('hideResult')}</Button>
+        <Button type='primary' onClick={onRefreshButtonClick} disabled={!evaluate}>{t('refreshResult')}</Button>
       </div>
-      { evaluate 
-        ? <div className='gaptext-evaluation-area'>
-          <div className='left'>
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col" className='colHead'>Suchbegriff</th>
-                  <th scope="col" className='colHead'>Deine Eingabe</th>
-                  <th scope="col" className='colHead'>Ergebnis</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  results.map((result, index) => {
-                    if(result) {
-                      return (
-                        <tr key={index}>
-                          <td>{result.match}</td>
-                          <td>{result.input}</td>
-                          <td>{result.isRight ? 'richtig': 'falsch'}</td>
-                        </tr>
-                      );
-                    }  
-                    return (
-                      <tr key={index}>
-                        <td>{replacements[index].expression}</td>
-                        <td>keine Eingabe</td>
-                        <td>falsch</td>
-                      </tr>
-                    );
-                  })
-                }
-              </tbody>
-            </table>
-          </div>
-          </div> 
-        : null}
+      <div className='gaptext-evaluation-area'>
+        { evaluate 
+          ? <GapResultTable results={results} replacements={replacements} />
+          : null}
+      </div>
     </div>
   );
 

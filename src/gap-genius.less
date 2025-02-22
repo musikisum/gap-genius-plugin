@@ -18,12 +18,14 @@
     border-top: 1px solid gray;
     margin: 40px 0;
     padding-top: 40px;
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
   }
 
   .gaptext-evaluation-area {
     min-height: 200px;
-    border: 6px solid #DB6F6F;
+    border: 2px solid @edu-banner-green-background-color;
     padding: 20px;
   }
 
@@ -32,6 +34,13 @@
   }
   .left > table {
     width: 100%;
+  }
+
+  .green {
+    background-color: @edu-banner-green-background-color;
+  }
+  .red {
+    background-color: @edu-banner-red-background-color;
   }
 
   .colHead {

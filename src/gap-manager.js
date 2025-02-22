@@ -14,8 +14,19 @@ const getFuseMatch = test => {
   return hasResult ? { match: result[0].item.gap, input: test.gapInput, isRight: result.length > 0 } : null;
 };
 
+const refreshResults = tester => {
+  const res = [];      
+  for (let index = 0; index < Object.keys(tester).length; index += 1) {
+    const test = tester[index];
+    const match = getFuseMatch(test);
+    res.push(match);   
+  } 
+  return res; 
+};
+
 const GapManager = {
-  getFuseMatch
+  getFuseMatch,
+  refreshResults
 };
 
 export default GapManager;
