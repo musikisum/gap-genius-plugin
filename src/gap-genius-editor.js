@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, Flex, Switch } from 'antd';
+import { Button, Form, Flex, Switch, Radio } from 'antd';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
@@ -12,11 +12,23 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { width, text, footnotes, showExample, replacements } = content;
+  const { width, text, footnotes, showExample, showFillIns, replacements } = content;
   const [analyseText, setAnalyseText] = useState(false);
 
   // console.log('replacements:', replacements);
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
+
+  const RadioGroup = Radio.Group;
+  const radioOptions = [
+    {
+      label: t('gameMode'),
+      value: 'false'
+    },
+    {
+      label: t('footNoteMode'),
+      value: 'true'
+    }
+  ];
 
   const updateContent = newContentValues => {
     onContentChanged({ ...content, ...newContentValues });
@@ -27,9 +39,13 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onExampleButtonClick = () => {
-    const et = GapGeniusUtils.exampleText;
-    const nros = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
-    updateContent({ text: et, replacements: nros, showExample: !showExample, showResults: !showExample });
+    if (!showExample) {
+      const et = GapGeniusUtils.exampleText;
+      const nros = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
+      updateContent({ text: et, replacements: nros, showExample: !showExample });
+    } else {
+      updateContent({ text: '', replacements: [], showExample: !showExample });
+    }
   };
 
   const onTextChange = event => {
@@ -63,7 +79,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
-  const onGameModeSwitchChange = hasFootnotes => {
+  const onGameModeSwitchChange = e => {
+    const hasFootnotes = e.target.value === 'true';
     let replacementCopy = cloneDeep(replacements);
     replacementCopy = hasFootnotes 
       ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footenoteErrorText')) 
@@ -73,8 +90,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
   
   const onExampleSwitchChange = value => {
-    console.log('value:', value)
-    updateContent({ showResults: !value });
+    updateContent({ showFillIns: !value });
   };
 
   return (
@@ -83,18 +99,13 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
           <div className='switchArea'>
             <div className='switchContainer'>
-              <div className='switchlabelLeft'>{t('gameMode')}</div>
-              <Switch 
-                className='customSwitch'
-                checked={footnotes}
-                onChange={onGameModeSwitchChange}
-                />
-              <div className='switchlabelRight'>{t('footNoteMode')}</div>
+              <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${footnotes}`} />
             </div>
-            <div className='switchContainer' style={{ display: showExample ? 'flex' : 'none' }}>
+            <div className='switchContainer' style={{ display: showExample && !footnotes ? 'flex' : 'none' }}>
               <div className='switchlabelLeft'>{t('showExampleResult')}</div>
               <Switch
                 className='customSwitch'
+                defaultChecked={!showFillIns}
                 onChange={onExampleSwitchChange}
                 />
               <div className='switchlabelRight'>{t('hideExampleResult')}</div>
@@ -105,7 +116,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           <MarkdownInput 
             value={text} 
             onChange={onTextChange} 
-            disabled={analyseText} 
+            disabled={analyseText || showExample} 
             className='defaultTextColor' 
             renderAnchors 
             />
@@ -114,7 +125,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           <Flex className='antFlex' gap='middle'>
             <Button className='antBtn' type='primary' onClick={onModusChange} disabled={showExample}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
             <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={analyseText || showExample}>{t('actualizeText')}</Button>
-            <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
+            <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
           </Flex>
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>

@@ -77,12 +77,12 @@
       "de": "Ergebnis ausblenden"
     },
     "showExampleResult": {
-      "en": "With result",
-      "de": "Mit Auswertung"
+      "en": "With inputs",
+      "de": "Mit Eingaben"
     },
     "hideExampleResult": {
-      "en": "Without result",
-      "de": "Ohne Auswertung"
+      "en": "Without inputs",
+      "de": "Ohne Eingaben"
     }
   }
 }
