@@ -12,7 +12,7 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { width, text, footnotes, replacements } = content;
+  const { width, text, footnotes, showExample, replacements } = content;
   const [analyseText, setAnalyseText] = useState(false);
 
   // console.log('replacements:', replacements);
@@ -29,7 +29,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const onExampleButtonClick = () => {
     const et = GapGeniusUtils.exampleText;
     const nros = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
-    updateContent({ text: et, replacements: nros });
+    updateContent({ text: et, replacements: nros, showExample: !showExample, showResults: !showExample });
   };
 
   const onTextChange = event => {
@@ -63,7 +63,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
-  const onSwitchChange = hasFootnotes => {
+  const onGameModeSwitchChange = hasFootnotes => {
     let replacementCopy = cloneDeep(replacements);
     replacementCopy = hasFootnotes 
       ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footenoteErrorText')) 
@@ -71,18 +71,35 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     const newText = GapGeniusUtils.updateText(text, replacementCopy, hasFootnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
+  
+  const onExampleSwitchChange = value => {
+    console.log('value:', value)
+    updateContent({ showResults: !value });
+  };
 
   return (
     <div className="EP_Educandu_Gap_Genius_Editor">
       <Form labelAlign="left">
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
-          <Switch 
-            className='customSwitch'
-            checked={footnotes}
-            checkedChildren={t('gameMode')} 
-            unCheckedChildren={t('footNoteMode')} 
-            onChange={onSwitchChange} 
-            />
+          <div className='switchArea'>
+            <div className='switchContainer'>
+              <div className='switchlabelLeft'>{t('gameMode')}</div>
+              <Switch 
+                className='customSwitch'
+                checked={footnotes}
+                onChange={onGameModeSwitchChange}
+                />
+              <div className='switchlabelRight'>{t('footNoteMode')}</div>
+            </div>
+            <div className='switchContainer' style={{ display: showExample ? 'flex' : 'none' }}>
+              <div className='switchlabelLeft'>{t('showExampleResult')}</div>
+              <Switch
+                className='customSwitch'
+                onChange={onExampleSwitchChange}
+                />
+              <div className='switchlabelRight'>{t('hideExampleResult')}</div>
+            </div>
+          </div>
         </Form.Item>
         <Form.Item label={t('gapText')} {...FORM_ITEM_LAYOUT}>
           <MarkdownInput 
@@ -95,9 +112,9 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <Flex className='antFlex' gap='middle'>
-            <Button className='antBtn' type='primary' onClick={onModusChange}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={analyseText}>{t('actualizeText')}</Button>
-            <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{t('insertText')}</Button>
+            <Button className='antBtn' type='primary' onClick={onModusChange} disabled={showExample}>{analyseText ? t('keywordsInputMode'): t('textInputMode')}</Button>
+            <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={analyseText || showExample}>{t('actualizeText')}</Button>
+            <Button className='antBtn' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
           </Flex>
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>

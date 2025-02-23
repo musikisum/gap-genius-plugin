@@ -2,18 +2,20 @@ import { Button } from 'antd';
 import PropTypes from 'prop-types';
 import GapManager from '../gap-manager.js';
 import { useTranslation } from 'react-i18next';
+import GapResultPie from './gap-result-pie.js';
 import GapResultTable from './gap-result-table.js';
 import React, { useState, useEffect } from 'react';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import GapGameTextInput from './gap-game-text-input.js';
-
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 
 function GapGameText({ content }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
-  const { width, text, replacements } = content;
+  const { width, text, showResults, replacements } = content;
+  const exampleResults = GapGeniusUtils.exampleResults;
+
   const [tester, setTester] = useState();
   const [evaluate, setEvaluate] = useState(false);
   const [results, setResults] = useState();
@@ -22,7 +24,7 @@ function GapGameText({ content }) {
     const obj = replacements.reduce((akku, item) => {
       akku[item.index] = {
         expression: item.expression,
-        gapInput: '',
+        gapInput: showResults ? exampleResults[item.index] : '',
         synonyms: item.list
       };
       return akku;
@@ -73,14 +75,19 @@ function GapGameText({ content }) {
         <Button type='primary' onClick={onRefreshButtonClick} disabled={!evaluate}>{t('refreshResult')}</Button>
       </div>
       <div className='gaptext-evaluation-area'>
-        { evaluate 
-          ? <GapResultTable results={results} replacements={replacements} />
-          : null}
+        <div className='left'>
+          { evaluate 
+            ? <GapResultTable results={results} replacements={replacements} />
+            : null}
+        </div>
+        <div className='right'>
+          { evaluate 
+            ? <GapResultPie results={results} replacements={replacements} />
+            : null}
+        </div>
       </div>
     </div>
   );
-
-  // return /* @__PURE__ */ React.createElement(Markdown, { renderAnchors: true, className: `u-horizontally-centered u-width-${content.width}` }, content.text);
 };
 
 GapGameText.propTypes = {

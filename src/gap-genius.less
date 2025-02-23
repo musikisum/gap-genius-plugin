@@ -1,7 +1,6 @@
 .EP_Educandu_Gap_Genius_Display {
 
   .footnote-line {
-    // background-color: gray;
     margin: 40px auto;
 
     .line {
@@ -19,34 +18,36 @@
     margin: 40px 0;
     padding-top: 40px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 6px;
   }
 
   .gaptext-evaluation-area {
-    min-height: 200px;
-    border: 2px solid @edu-banner-green-background-color;
     padding: 20px;
+    display: flex;
+    align-items:center;
   }
 
   .left {
-    width: 50%;
+    flex-grow: 1;
+    padding-right: 20px;
+    border-right: 1px solid #DB6F6F;
   }
   .left > table {
     width: 100%;
   }
-
-  .green {
-    background-color: @edu-banner-green-background-color;
-  }
-  .red {
-    background-color: @edu-banner-red-background-color;
+  .right {
+    padding-left: 20px;
   }
 
   .colHead {
     text-align: left;
     width: 33%;
     border-bottom: 1px solid gray;
+    padding: 2px 6px;
+  }
+  .colBody {
+    padding: 2px 6px;
   }
 
   .footnote-content {
@@ -97,6 +98,20 @@
     word-wrap: break-word;
   }
 
+  .switchArea {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .switchContainer {
+    display: flex;
+  }
+  .switchlabelLeft {
+    margin-right: 6px;
+  }
+  .switchlabelRight {
+    margin-left: 6px;
+  }
   .customSwitch {
     background-color: @edu-primary-color-light !important;
   }  

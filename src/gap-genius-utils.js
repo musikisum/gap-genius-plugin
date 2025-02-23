@@ -1,8 +1,11 @@
 // Text for exemplification, hwo does the plugin work 
-const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definitionen ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(zwei) Töne als Akkord hören, (drei)() Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (C)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten) anzukämpfen?';
+const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definition ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen, Gehör) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(zwei, drei) Töne als Akkord hören, (drei)(drei, vier) Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden, widersprüchlich), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (C)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten, andere Meinungen, Unwissenheit) anzukämpfen?';
+
+// Example object for example mode
+const exampleResults = ['Akord', 'Klang', 'Gehör', 'zwei', 'drei', 'Klang', 'falsch', 'c-Dur Akord', 'c', 'Blödheit'];
 
 // Regex to match the marks on an expression with synonyms or a footnote 
-// const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g;
+// const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g; | without mardown links
 const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*?(?:\[[^\]]+\]\([^)]+\))?[^()]*)\)/g;
 
 // Replace the default text in footnote mode for empty inputs
@@ -125,6 +128,7 @@ const createListFromInputLine = (inputLine, expression, footnotes) => {
 const GapGeniusUtils = {
   regex,
   exampleText,
+  exampleResults,
   updateText,
   createNewReplacementObjects,
   createListFromInputLine,

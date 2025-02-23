@@ -18,12 +18,12 @@ function GapGameTextInput({ index, onTextInputChange }) {
 
 GapGameTextInput.propTypes = {
   index: PropTypes.number,
-  onTextInputChange: PropTypes.func
+  onTextInputChange: PropTypes.func,
 };
 
 GapGameTextInput.defaultProps = {
   index: 0,
-  onTextInputChange: null
+  onTextInputChange: null,
 };
 
 export default GapGameTextInput;

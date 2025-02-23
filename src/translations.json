@@ -21,20 +21,24 @@
       "de": "Beispieltext"
     },
     "insertText": {
-      "en": "Insert example text",
-      "de": "Beispieltext einfügen"
+      "en": "Demo mode enabled",
+      "de": "Zeige Demo"
+    },
+    "deleteText": {
+      "en": "Demo mode disabled",
+      "de": "Verlasse Demo"
     },
     "gameMode": {
-      "en": "→ Gap text",
-      "de": "→ Lückentext"
+      "en": "Gap text",
+      "de": "Lückentext"
     },
     "switchLabelText": {
-      "en": "Mode",
-      "de": "Modus"
+      "en": "Settings",
+      "de": "Einstellungen"
     },
     "footNoteMode": {
-      "en": "→ Footnotes",
-      "de": "→ Fußnoten"
+      "en": "Footnotes",
+      "de": "Fußnoten"
     },
     "footenoteErrorText": {
       "en": "empty footnote",
@@ -49,8 +53,8 @@
       "de": "Texteingabe ↑"
     },
     "actualizeText": {
-      "en": "Actualize text",
-      "de": "Text aktualisieren"
+      "en": "Actualize text ↑",
+      "de": "Text aktualisieren ↑"
     },
     "inputTextVariables": {
       "en": "Please provide a number of synonyms for the variables marked in the text:",
@@ -71,6 +75,14 @@
     "hideResult": {
       "en": "Hide Result",
       "de": "Ergebnis ausblenden"
+    },
+    "showExampleResult": {
+      "en": "With result",
+      "de": "Mit Auswertung"
+    },
+    "hideExampleResult": {
+      "en": "Without result",
+      "de": "Ohne Auswertung"
     }
   }
 }
