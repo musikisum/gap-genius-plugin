@@ -13,6 +13,7 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
   const { width, text, footnotes, showExample, showFillIns, replacements } = content;
+  const gapText = !footnotes;
   const [analyseText, setAnalyseText] = useState(false);
 
   // console.log('replacements:', replacements);
@@ -22,11 +23,11 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const radioOptions = [
     {
       label: t('gameMode'),
-      value: 'false'
+      value: 'true'
     },
     {
       label: t('footNoteMode'),
-      value: 'true'
+      value: 'false'
     }
   ];
 
@@ -41,7 +42,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const onExampleButtonClick = () => {
     if (!showExample) {
       const et = GapGeniusUtils.exampleText;
-      const nros = GapGeniusUtils.createNewReplacementObjects(et, footnotes);
+      const nros = GapGeniusUtils.createNewReplacementObjects(et, !gapText);
       updateContent({ text: et, replacements: nros, showExample: !showExample });
     } else {
       updateContent({ text: '', replacements: [], showExample: !showExample });
@@ -53,13 +54,13 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   };
 
   const onTextUpdateChange = () => {
-    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    const newText = GapGeniusUtils.updateText(text, nro, footnotes);
+    const nro = GapGeniusUtils.createNewReplacementObjects(text, gapText);
+    const newText = GapGeniusUtils.updateText(text, nro, gapText);
     updateContent({ text: newText, replacements: nro });
   };
 
   const onModusChange = () => {
-    const nro = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
+    const nro = GapGeniusUtils.createNewReplacementObjects(text, gapText);
     setAnalyseText(!analyseText);
     updateContent({ replacements: nro });
   };
@@ -67,15 +68,15 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const onReplacementsChange = (inputLine, itemIndex) => {
     const replacementCopy = cloneDeep(replacements);
     const item = replacementCopy[itemIndex];
-    const tempList = GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes);
-    if (!footnotes && tempList.length === 0) {
+    const tempList = GapGeniusUtils.createListFromInputLine(inputLine, item.expression, gapText);
+    if (!gapText && tempList.length === 0) {
       tempList.push(item.expression);
     }
     replacementCopy[itemIndex] = { 
       ...item, 
       list: tempList
     };
-    const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
+    const newText = GapGeniusUtils.updateText(text, replacementCopy, gapText);
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
@@ -83,8 +84,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     const hasFootnotes = e.target.value === 'true';
     let replacementCopy = cloneDeep(replacements);
     replacementCopy = hasFootnotes 
-      ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footenoteErrorText')) 
-      : GapGeniusUtils.createGapGameReplacements(replacementCopy, t('footenoteErrorText')); 
+      ? GapGeniusUtils.createFootnoteReplacements(replacementCopy, t('footnoteErrorText')) 
+      : GapGeniusUtils.createGapGameReplacements(replacementCopy, t('footnoteErrorText')); 
     const newText = GapGeniusUtils.updateText(text, replacementCopy, hasFootnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
@@ -99,9 +100,9 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
           <div className='switchArea'>
             <div className='switchContainer'>
-              <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${footnotes}`} />
+              <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${gapText}`} />
             </div>
-            <div className='switchContainer' style={{ display: showExample && !footnotes ? 'flex' : 'none' }}>
+            <div className='switchContainer' style={{ display: showExample && gapText ? 'flex' : 'none' }}>
               <div className='switchlabelLeft'>{t('showExampleResult')}</div>
               <Switch
                 className='customSwitch'
@@ -130,7 +131,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           { analyseText 
-            ? <div className='messageArea' >{ !footnotes ? t('inputTextVariables') : t('inputFootnoteVariables')}</div> 
+            ? <div className='messageArea' >{ !gapText ? t('inputTextVariables') : t('inputFootnoteVariables')}</div> 
             : null }
         </Form.Item>
         { analyseText
@@ -143,7 +144,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
                 >
                 <EditableInput
                   index={item.index}
-                  line={GapGeniusUtils.createInputfromList(item.index, item.expression, item.list, footnotes, t('footenoteErrorText'))}
+                  line={GapGeniusUtils.createInputfromList(item.index, item.expression, item.list, gapText, t('footnoteErrorText'))}
                   expression={item.expression}
                   footnotes={footnotes}
                   onSave={e => onReplacementsChange(e, item.index)}

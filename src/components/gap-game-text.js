@@ -14,6 +14,7 @@ function GapGameText({ content }) {
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const { width, text, showFillIns, replacements } = content;
+  console.log('replacements:', replacements)
   const exampleResults = GapGeniusUtils.exampleResults;
 
   const [tester, setTester] = useState();

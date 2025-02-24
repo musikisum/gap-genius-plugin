@@ -29,7 +29,7 @@ musikisum/educandu-plugin-gap-genius:
   footNoteMode:
     en: Footnotes
     de: Fußnoten
-  footenoteErrorText:
+  footnoteErrorText:
     en: empty footnote
     de: leere Fußnote
   keywordsInputMode:
