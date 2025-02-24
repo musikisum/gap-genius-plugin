@@ -4,26 +4,20 @@ import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 
-function EditableInput({ index, line, expression, footnotes, onSave }) {
+function EditableInput({ line, footnotes, onSave }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const [editing, setEditing] = useState(false);
-  const [inputLine, setInputLine] = useState();
+  const [inputLine, setInputLine] = useState('');
 
   useEffect(() => {    
     setInputLine(line);
-  }, [line]);
+  }, []);
 
   const handleSave = () => {
     setEditing(false);
-    let temp = inputLine;
-    if (!footnotes && !temp) {
-      temp = expression;
-    } 
-    if (footnotes && !temp) {
-      temp = `${index+1}. ${t('footenoteErrorText')}`;
-    }
+    const temp = inputLine ? inputLine.trim() : '';
     setInputLine(temp);
     onSave(temp);
   };
@@ -47,7 +41,7 @@ function EditableInput({ index, line, expression, footnotes, onSave }) {
             className='text-editable-input-display'
             onClick={() => setEditing(true)}
             >
-            {inputLine || <div style={{ color: '#aaa' }}>Klicken zum Bearbeiten</div>}
+            {inputLine || <div style={{ color: '#aaa' }}>{footnotes ? t('defaultFootnoteInputText') : t('defaultGapInputText')}</div>}
           </div>
           <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
           </React.Fragment>}

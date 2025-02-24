@@ -18,6 +18,7 @@ const refreshResults = tester => {
   const res = [];      
   for (let index = 0; index < Object.keys(tester).length; index += 1) {
     const test = tester[index];
+    test.synonyms.unshift(test.expression);
     const match = getFuseMatch(test);
     res.push(match);   
   } 

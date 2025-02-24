@@ -50,7 +50,7 @@ class GapGeniusInfo {
     const replacementSchema = joi.object({
       index: joi.alternatives().try(joi.number().integer().required(), joi.array().length(0)),
       expression: joi.string().required(),
-      list: joi.array().items(joi.string().required()).default([]).required()
+      list: joi.array().items(joi.string().allow('')).default([]).required()
     });
     const schema = joi.object({
       width: joi.number().min(0).max(100).required(),
@@ -58,7 +58,7 @@ class GapGeniusInfo {
       footnotes: joi.boolean().required(),
       showExample: joi.boolean().required(),
       showFillIns: joi.boolean().required(),
-      replacements: joi.array().items(replacementSchema).required()
+      replacements: joi.array().items(replacementSchema).default([]).required()
     });
 
     joi.attempt(content, schema, { abortEarly: false, convert: false, noDefaults: true });

@@ -14,7 +14,6 @@ function GapGameText({ content }) {
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const { width, text, showFillIns, replacements } = content;
-  console.log('replacements:', replacements)
   const exampleResults = GapGeniusUtils.exampleResults;
 
   const [tester, setTester] = useState();
@@ -22,7 +21,8 @@ function GapGameText({ content }) {
   const [results, setResults] = useState();
 
   useEffect(() => {
-    const obj = replacements.reduce((akku, item) => {
+    const repl = replacements.length ? replacements : GapGeniusUtils.createNewReplacementObjects(text); 
+    const obj = repl.reduce((akku, item) => {
       akku[item.index] = {
         expression: item.expression,
         gapInput: showFillIns ? exampleResults[item.index] : '',
@@ -78,12 +78,12 @@ function GapGameText({ content }) {
       <div className='gaptext-evaluation-area'>
         <div className='left'>
           { evaluate 
-            ? <GapResultTable results={results} replacements={replacements} />
+            ? <GapResultTable tester={tester} results={results} />
             : null}
         </div>
         <div className='right'>
           { evaluate 
-            ? <GapResultPie results={results} replacements={replacements} />
+            ? <GapResultPie tester={tester} results={results} />
             : null}
         </div>
       </div>

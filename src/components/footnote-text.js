@@ -9,21 +9,17 @@ function FootnoteText({ content }) {
   const { width, text } = content;
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
+  const charsWithoutWhitespace = [',', ';', '.'];
 
   const createFootnotesText = () => {
     let testText = text;
     let index = 1;
     for (const match of text.matchAll(GapGeniusUtils.regex)) {
-      testText = testText.replace(match[0], `${match.groups.expression}(${index}) `);
+      const nextChar = text[match.index + match[0].length];
+      testText = testText.replace(match[0], `${match.groups.expression}(${index})${charsWithoutWhitespace.includes(nextChar) ? '' : ' '}`);
       index += 1;
     }   
     return testText; 
-  };
-
-  const maskDefaultText = new RegExp(`(\\d+)\\.\\s*${t('footenoteErrorText')}\\s*`, 'g');
-
-  const textReplace = fnText => {
-    return fnText.replace(maskDefaultText, (_, number) => `${number}\\. ${t('footenoteErrorText')}`);
   };
 
   return (
@@ -45,7 +41,7 @@ function FootnoteText({ content }) {
               renderAnchors
               className={`u-horizontally-centered u-width-${content.width}`}
               >
-              {`(${obj.index + 1}) ${textReplace(obj.list[0])}`}
+              {`(${obj.index + 1}) ${obj.list.length === 0 ? '' : obj.list[0]}`}
           </Markdown>);
         })}
       </div>

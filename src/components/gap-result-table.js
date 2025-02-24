@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function GapResultTable({ results, replacements }) {
+function GapResultTable({ tester, results }) {
 
   const tableRed = {
     backgroundColor: 'rgba(255, 99, 132, 0.2)'
@@ -45,8 +45,8 @@ function GapResultTable({ results, replacements }) {
             }  
             return (
               <tr key={index} style={tableRed}>
-                <td className='colBody'>{replacements[index].expression}</td>
-                <td className='colBody'>keine Eingabe</td>
+                <td className='colBody'>{tester[index].expression}</td>
+                <td className='colBody'>{tester[index].gapInput}</td>
                 <td className='colBody'>falsch</td>
               </tr>
             );
@@ -59,12 +59,12 @@ function GapResultTable({ results, replacements }) {
 
 GapResultTable.propTypes = {
   results: PropTypes.array,
-  replacements: PropTypes.array
+  tester: PropTypes.object
 };
 
 GapResultTable.defaultProps = {
   results: null,
-  replacements: null
+  tester: null
 };
 
 export default GapResultTable;

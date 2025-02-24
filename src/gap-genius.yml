@@ -5,9 +5,6 @@ musikisum/educandu-plugin-gap-genius:
   label:
     en: Example label
     de: Beispiel-Label
-  currentServerTime:
-    en: Current server time
-    de: Test erfolgreich 1!
   gapText:
     en: Text with variables
     de: Text mit Variablen
@@ -29,9 +26,12 @@ musikisum/educandu-plugin-gap-genius:
   footNoteMode:
     en: Footnotes
     de: Fußnoten
-  footnoteErrorText:
-    en: empty footnote
-    de: leere Fußnote
+  defaultFootnoteInputText:
+    en: Insert footnote text here ...
+    de: Hier Fußnotentext einfügen ...
+  defaultGapInputText:
+    en: Insert one or more semicolon or comma separated synonyms here ...
+    de: Hier einen oder mehrere, durch Semikolon oder Komma separierte Synonyme einfügen ... 
   keywordsInputMode:
     en: Change variables ↓
     de: Variablen ändern ↓
