@@ -56,6 +56,30 @@
       "en": "Actualize text ↑",
       "de": "Text aktualisieren ↑"
     },
+    "modeRadios": {
+      "en": "Toggle between Gap-Game mode and footnotes mode",
+      "de": "Wechsel zwischen Lückentext- und Fußnoten-Modus)"
+    },
+    "buttonTextInput": {
+      "en": "Change input mode",
+      "de": "Eingabemodus ändern"
+    },
+    "buttonTextUpdate": {
+      "en": "Update text after changes",
+      "de": "Text oben nach Eingabe aktualisieren"
+    },
+    "buttonExample": {
+      "en": "Activate/Exit demo mode: Insert sample text, all inputs will be deleted!",
+      "de": "Demo-Modus einschalten/verlassen: Beispieltext einfügen, alle Eingaben werden gelöscht!"
+    },
+    "inputButtonText": {
+      "en": "Edit synonyms or a footnote",
+      "de": "Synonyme oder Fußnote bearbeiten"
+    },
+    "saveButtonText": {
+      "en": "Save synonyms or a footnote",
+      "de": "Synonyme oder Fußnote speichern"
+    },
     "inputTextVariables": {
       "en": "Please provide a number of synonyms for the variables marked in the text:",
       "de": "Bitte geben Sie für die im Text gekennzeichneten Variablen Synonyme an:"
@@ -76,13 +100,53 @@
       "en": "Hide Result",
       "de": "Ergebnis ausblenden"
     },
+    "switchExample": {
+      "en": "Fill-in / delete example solutions",
+      "de": "Beispiellösungen einfügen / löschen"
+    },
     "showExampleResult": {
-      "en": "With inputs",
-      "de": "Mit Eingaben"
+      "en": "Fill-in",
+      "de": "Einfügen"
     },
     "hideExampleResult": {
-      "en": "Without inputs",
-      "de": "Ohne Eingaben"
+      "en": "Delete",
+      "de": "Löschen"
+    },
+    "checkText": {
+      "en": "right",
+      "de": "richtig"
+    },
+    "checkText2": {
+      "en": "meant right",
+      "de": "richtig gemeint"
+    },
+    "crossText": {
+      "en": "wrong",
+      "de": "falsch"
+    },
+    "searchTerm": {
+      "en": "Gaptext expression",
+      "de": "Lückentext-Begriff"
+    },
+    "yourInput": {
+      "en": "Your input",
+      "de": "Deine Eingabe"
+    },
+    "yourResult": {
+      "en": "Your result",
+      "de": "Dein Ergebnis"
+    },
+    "resultButton": {
+      "en": "Show / Hide result",
+      "de": "Ergebnis zeigen / verbergen"
+    },
+    "refreshButton": {
+      "en": "Refresh your result after new inputs",
+      "de": "Aktualisiere dein Ergebnis nach neuen Eingaben"
+    },
+    "votesText": {
+      "en": "# of your inputs",
+      "de": "# von deinen Eingaben"
     }
   }
 }

@@ -104,15 +104,19 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
           <div className='switchArea'>
             <div className='switchContainer'>
-              <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${!footnotes}`} />
+              <Tooltip title={t('modeRadios')}>
+                <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${!footnotes}`} />
+              </Tooltip>
             </div>
             <div className='switchContainer' style={{ display: showExample && !footnotes ? 'flex' : 'none' }}>
               <div className='switchlabelLeft'>{t('showExampleResult')}</div>
-              <Switch
-                className='customSwitch'
-                defaultChecked={!showFillIns}
-                onChange={onExampleSwitchChange}
-                />
+              <Tooltip title={t('switchExample')}>
+                <Switch
+                  className='customSwitch'
+                  defaultChecked={!showFillIns}
+                  onChange={onExampleSwitchChange}
+                  />
+              </Tooltip>
               <div className='switchlabelRight'>{t('hideExampleResult')}</div>
             </div>
           </div>
@@ -128,9 +132,15 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <Flex className='antFlex' gap='middle'>
-            <Button className='antBtn' type='primary' onClick={onEnableTextInputsChange} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={enableEditorInputs || showExample}>{t('actualizeText')}</Button>
-            <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
+            <Tooltip title={t('buttonTextInput')}>
+              <Button className='antBtn' type='primary' onClick={onEnableTextInputsChange} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
+            </Tooltip>
+            <Tooltip title={t('buttonTextUpdate')}>
+              <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={enableEditorInputs || showExample}>{t('actualizeText')}</Button>
+            </Tooltip>
+            <Tooltip title={t('buttonExample')}>
+              <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
+            </Tooltip>
           </Flex>
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>

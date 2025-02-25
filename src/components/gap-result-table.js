@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CheckIcon from '../images/check.js';
+import CrossIcon from '../images/cross.js';
+import { useTranslation } from 'react-i18next';
 
 function GapResultTable({ tester, results }) {
+
+  const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const tableRed = {
     backgroundColor: 'rgba(255, 99, 132, 0.2)'
@@ -26,9 +31,9 @@ function GapResultTable({ tester, results }) {
     <table>
       <thead>
         <tr style={{ backgroundColor: '#6d8bb1', color: 'white' }}>
-          <th scope="col" className='colHead'>Suchbegriff</th>
-          <th scope="col" className='colHead'>Deine Eingabe</th>
-          <th scope="col" className='colHead'>Ergebnis</th>
+          <th scope="col" className='colHead'>{t('searchTerm')}</th>
+          <th scope="col" className='colHead'>{t('yourInput')}</th>
+          <th scope="col" className='colHead'>{t('result')}</th>
         </tr>
       </thead>
       <tbody>
@@ -39,7 +44,8 @@ function GapResultTable({ tester, results }) {
                 <tr key={index} style={evaluatColor(result)}>
                   <td className='colBody'>{result.match}</td>
                   <td className='colBody'>{result.input}</td>
-                  <td className='colBody'>{result.isRight ? 'richtig': 'falsch'}</td>
+                  {result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('checkText')} `}</div><CheckIcon /></td> : null }
+                  {!result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('crossText')} `}</div><CrossIcon /></td> : null }
                 </tr>
               );
             }  
@@ -47,7 +53,9 @@ function GapResultTable({ tester, results }) {
               <tr key={index} style={tableRed}>
                 <td className='colBody'>{tester[index].expression}</td>
                 <td className='colBody'>{tester[index].gapInput}</td>
-                <td className='colBody'>falsch</td>
+                <td className='colBody checkAndCrossTd'>
+                  <div>{`${t('crossText')} `}</div><CrossIcon />
+                </td>
               </tr>
             );
           })

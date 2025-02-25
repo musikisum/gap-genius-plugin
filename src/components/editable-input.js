@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Input, Button } from 'antd';
+import { Input, Button, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
@@ -13,7 +13,7 @@ function EditableInput({ line, footnotes, onSave }) {
 
   useEffect(() => {    
     setInputLine(line);
-  }, []);
+  }, [line]);
 
   const handleSave = () => {
     setEditing(false);
@@ -34,7 +34,9 @@ function EditableInput({ line, footnotes, onSave }) {
             onPressEnter={handleSave}
             onBlur={handleSave}
             />
-          <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
+          <Tooltip title={t('saveButtonText')}>
+            <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
+          </Tooltip>
           </React.Fragment>
         : <React.Fragment>
           <div
@@ -43,7 +45,9 @@ function EditableInput({ line, footnotes, onSave }) {
             >
             {inputLine || <div style={{ color: '#aaa' }}>{footnotes ? t('defaultFootnoteInputText') : t('defaultGapInputText')}</div>}
           </div>
-          <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
+          <Tooltip title={t('inputButtonText')}>
+            <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
+          </Tooltip>
           </React.Fragment>}
     </div>
   );
@@ -51,14 +55,12 @@ function EditableInput({ line, footnotes, onSave }) {
 
 EditableInput.propTypes = {
   line: PropTypes.string,
-  expression: PropTypes.string,
   footnotes: PropTypes.bool,
   onSave: PropTypes.func
 };
 
 EditableInput.defaultProps = {
   line: null,
-  expression: null,
   footnotes: false,
   onSave: null,
 };

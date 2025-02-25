@@ -1,5 +1,5 @@
-import { Button } from 'antd';
 import PropTypes from 'prop-types';
+import { Button, Tooltip } from 'antd';
 import GapManager from '../gap-manager.js';
 import { useTranslation } from 'react-i18next';
 import GapResultPie from './gap-result-pie.js';
@@ -72,8 +72,12 @@ function GapGameText({ content }) {
         { createGapGameText() }
       </div>
       <div className='gaptext-button-area'>
-        <Button type='primary' onClick={onEvaluateButtonClick}>{!evaluate ? t('checkResult') : t('hideResult')}</Button>
-        <Button type='primary' onClick={onRefreshButtonClick} disabled={!evaluate}>{t('refreshResult')}</Button>
+        <Tooltip title={t('resultButton')}>
+          <Button type='primary' onClick={onEvaluateButtonClick}>{!evaluate ? t('checkResult') : t('hideResult')}</Button>
+        </Tooltip>
+        <Tooltip title={t('refreshButton')}>
+          <Button type='primary' onClick={onRefreshButtonClick} disabled={!evaluate}>{t('refreshResult')}</Button>
+        </Tooltip>
       </div>
       <div className='gaptext-evaluation-area'>
         <div className='left'>

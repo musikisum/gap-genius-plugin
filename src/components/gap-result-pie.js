@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 function GapResultPie({ results }) {
 
   ChartJS.register(ArcElement, Tooltip, Legend);
+
+  const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
   const currentData = results.reduce((akku, item) => {
     if(!item) {
@@ -23,10 +26,10 @@ function GapResultPie({ results }) {
   }, [0, 0, 0]);
 
   const data = {
-    labels: ['falsch', 'richtig', 'richtig gemeint'],
+    labels: [t('crossText'), t('checkText'), t('checkText2')],
     datasets: [
       {
-        label: '# of Votes',
+        label: t('votesText'),
         data: currentData,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
