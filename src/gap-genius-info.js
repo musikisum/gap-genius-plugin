@@ -1,6 +1,6 @@
 import joi from 'joi';
 import React from 'react';
-import { ClockCircleOutlined } from '@ant-design/icons';
+import GapGeniusIcon from './gap-genius-icon.js';
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 import { PLUGIN_GROUP } from '@educandu/educandu/domain/constants.js';
 import { couldAccessUrlFromRoom } from '@educandu/educandu/utils/source-utils.js';
@@ -20,7 +20,7 @@ class GapGeniusInfo {
   }
 
   getIcon() {
-    return <ClockCircleOutlined />;
+    return <GapGeniusIcon />;
   }
 
   getGroups() {
