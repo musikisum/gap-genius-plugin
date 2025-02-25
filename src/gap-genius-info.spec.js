@@ -66,7 +66,8 @@ describe('gap-genius-info', () => {
         width: 60,
         text: 'Example text',
         footnotes: false,
-        analyseText: false,
+        showExample: false,
+        showFillIns: false,
         replacements: [{ index: 0, expression: 'Akkord', list: ['dur', 'moll'] }]
       };
   
@@ -78,7 +79,8 @@ describe('gap-genius-info', () => {
         width: 60,
         text: 'Example text',
         footnotes: false,
-        analyseText: false,
+        showExample: false,
+        showFillIns: true,
         replacements: [{ index: 0, expression: 'Akkord', list: 3 }]
       };
   
@@ -90,7 +92,8 @@ describe('gap-genius-info', () => {
         width: 60,
         text: null,
         footnotes: false,
-        analyseText: false,
+        showExample: false,
+        showFillIns: false,
         replacements: [{ index: 0, expression: 'Akkord', list: ['dur', 'moll'] }]
       };
   

@@ -41,9 +41,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   // Handle text changes
   const onTextChange = event => {
-    const newText = event.target.value;
-    const nros = GapGeniusUtils.createNewReplacementObjects(newText);
-    updateContent({ text: newText, replacements: nros });
+    updateContent({ text: event.target.value });
   };
 
   // Provide an example to demonstrate the plugin functionalaties

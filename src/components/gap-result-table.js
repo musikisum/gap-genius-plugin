@@ -33,7 +33,7 @@ function GapResultTable({ tester, results }) {
         <tr style={{ backgroundColor: '#6d8bb1', color: 'white' }}>
           <th scope="col" className='colHead'>{t('searchTerm')}</th>
           <th scope="col" className='colHead'>{t('yourInput')}</th>
-          <th scope="col" className='colHead'>{t('result')}</th>
+          <th scope="col" className='colHead'>{t('yourResult')}</th>
         </tr>
       </thead>
       <tbody>

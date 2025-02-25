@@ -36,11 +36,11 @@ musikisum/educandu-plugin-gap-genius:
     en: Change variables ↓
     de: Variablen ändern ↓
   textInputMode:
-    en: Text input ↑
-    de: Texteingabe ↑
+    en: Modify text ↑
+    de: Texteingaben ↑
   actualizeText:
-    en: Actualize text ↑
-    de: Text aktualisieren ↑
+    en: Save text
+    de: Text übernehmen
   modeRadios:
     en: Toggle between Gap-Game mode and footnotes mode
     de: Wechsel zwischen Lückentext- und Fußnoten-Modus)

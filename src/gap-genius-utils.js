@@ -5,39 +5,35 @@ const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharf
 const exampleResults = ['Akord', 'Klang', 'Gehör', 'zwei', 'drei', 'Klang', 'falsch', 'c-Dur Akord', 'c', 'Blödheit'];
 
 // Regex to match the marks on an expression with synonyms or a footnote 
-// const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*)\)/g; | without mardown links
-const regex = /\((?<expression>[^()]+)\)\((?<list>[^()]*?(?:\[[^\]]+\]\([^)]+\))?[^()]*)\)/g;
-
-// Replace expressions in footnode mode
-const _getRegexReplaceExpressionText = exp => {
-  return new RegExp(`^${exp}(\\s*;\\s*)?`);
-};
+// const regex = /\((?<expression>[^()]+)\)\((?<list>(?:[^()]+|\([^()]*\))*)\)/g;
+const regex = /\((?<expression>(?:[^()]+|\([^()]*\))+)\)\((?<list>(?:[^()]+|\([^()]*\))*)\)/g;
 
 // Create an replacement object with index, espression and list properties from text 
 const createNewReplacementObjects = text => {
-  let index = 0;
-  const obj = [];
-  for (const match of text.matchAll(regex)) {
+  const matches = [...text.matchAll(regex)];
+  return matches.map((match, index) => {
     const expression = match.groups.expression;
-    let list;
-    list = match.groups.list.split(/[,;]\s*/).filter(item => item !== expression && item !== '');
+    let list = match.groups.list
+      .split(/[,;]\s*/)
+      .filter(item => item && item !== expression);
     list = [...new Set(list)];
-    obj.push({ index, expression, list });
-    index += 1;
-  };
-  return obj;
+    return { index, expression, list };
+  });
 };
 
 // Update lists in replacements for footnote mode 
 const createFootnoteReplacements = replacements => {
   return replacements.map(obj => {
-    let tempValue = obj.list.join('; ');
-    tempValue = tempValue.replace(_getRegexReplaceExpressionText(obj.expression), '');
-    obj.list[0] = tempValue;
+    obj.list[0] = obj.list.join('; ');
     obj.list.length = 1;
     return obj;
   });
 };
+
+// Regex helper function
+function _escapeRegExp(expression) {
+  return expression.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 // Update lists in replacements for game mode
 const createGapGameReplacements = replacements => {
@@ -45,11 +41,16 @@ const createGapGameReplacements = replacements => {
     if (!obj.list.length) {
       return obj;
     }
-    const newList = obj.list[0]
-      .split(/[,;]\s*/)
+    const escapedExpression = _escapeRegExp(obj.expression);
+    const tokenRegex = new RegExp(`(?:^|[;]\\s*)${escapedExpression}(?=\\s*(?:[;]|$))`, 'g');
+    let cleaned = obj.list[0].replace(tokenRegex, '');
+    cleaned = cleaned.replace(/^[;]\s*|[;]\s*$/g, '').trim();
+    const newList = cleaned
+      .split(/[;]\s*/)
       .map(item => item.trim())
       .filter(item => item.length > 0);
-    return { ...obj, list: newList };
+      
+    return { ...obj, list: [...new Set(newList)] };
   });
 };
 
@@ -88,7 +89,7 @@ const createListFromInputLine = (inputLine, expression, footnotes) => {
     .split(/\s*[;,]\s*/)
     .map(word => word.trim())
     .filter(word => word.length > 0)
-    .filter(word => word !== expression);
+    .filter(word => word.toLowerCase() !== expression.toLowerCase());
   return resultForGaps;   
 };
 
