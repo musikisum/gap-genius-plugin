@@ -22,35 +22,43 @@ function EditableInput({ line, footnotes, onSave }) {
     onSave(temp);
   };
 
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '2px', width: '100%' }}>
-      {editing 
-        ? <React.Fragment>
-          <Input
-            className='text-editable-input'
-            value={inputLine}
-            autoFocus
-            onChange={e => setInputLine(e.target.value)}
-            onPressEnter={handleSave}
-            onBlur={handleSave}
-            />
-          <Tooltip title={t('saveButtonText')}>
-            <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
-          </Tooltip>
-          </React.Fragment>
-        : <React.Fragment>
-          <div
-            className='text-editable-input-display'
-            onClick={() => setEditing(true)}
-            >
-            {inputLine || <div style={{ color: '#aaa' }}>{footnotes ? t('defaultFootnoteInputText') : t('defaultGapInputText')}</div>}
-          </div>
-          <Tooltip title={t('inputButtonText')}>
-            <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
-          </Tooltip>
-          </React.Fragment>}
-    </div>
-  );
+  /* eslint-disable react/jsx-indent */
+  const content = editing 
+    ? (
+      <React.Fragment>
+        <Input
+          className="text-editable-input"
+          value={inputLine}
+          autoFocus
+          onChange={e => setInputLine(e.target.value)}
+          onPressEnter={handleSave}
+          onBlur={handleSave}
+          />
+        <Tooltip title={t('saveButtonText')}>
+          <Button type="primary" icon={<CheckOutlined />} onClick={handleSave} />
+        </Tooltip>
+      </React.Fragment>
+    )
+    : (
+      <React.Fragment>
+        <div
+          className="text-editable-input-display"
+          onClick={() => setEditing(true)}
+          >
+          {inputLine || (
+            <div style={{ color: '#aaa' }}>
+              {footnotes ? t('defaultFootnoteInputText') : t('defaultGapInputText')}
+            </div>
+          )}
+        </div>
+        <Tooltip title={t('inputButtonText')}>
+          <Button type="link" icon={<EditOutlined />} onClick={() => setEditing(true)} />
+        </Tooltip>
+      </React.Fragment>
+    );
+  /* eslint-enable react/jsx-indent */
+
+  return <div className='editable-input-container'>{content}</div>;
 }
 
 EditableInput.propTypes = {

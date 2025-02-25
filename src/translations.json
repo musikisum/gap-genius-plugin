@@ -18,11 +18,11 @@
     },
     "insertText": {
       "en": "Demo mode enabled",
-      "de": "Zeige Demo"
+      "de": "Aktiviere Demo-Modus"
     },
     "deleteText": {
       "en": "Demo mode disabled",
-      "de": "Verlasse Demo"
+      "de": "Verlasse Demo-Modus"
     },
     "gameMode": {
       "en": "Gap text",
@@ -42,7 +42,7 @@
     },
     "defaultGapInputText": {
       "en": "Insert one or more semicolon or comma separated synonyms here ...",
-      "de": "Hier einen oder mehrere, durch Semikolon oder Komma separierte Synonyme einfügen ..."
+      "de": "Hier einen oder mehrere durch Semikolon oder Komma separierte Synonyme einfügen ..."
     },
     "keywordsInputMode": {
       "en": "Change variables ↓",
@@ -50,7 +50,7 @@
     },
     "textInputMode": {
       "en": "Modify text ↑",
-      "de": "Texteingaben ↑"
+      "de": "Text bearbeiten ↑"
     },
     "actualizeText": {
       "en": "Save text",
@@ -58,7 +58,7 @@
     },
     "modeRadios": {
       "en": "Toggle between Gap-Game mode and footnotes mode",
-      "de": "Wechsel zwischen Lückentext- und Fußnoten-Modus)"
+      "de": "Wechsel zwischen Lückentext- und Fußnoten-Modus"
     },
     "buttonTextInput": {
       "en": "Change input mode",
@@ -66,11 +66,11 @@
     },
     "buttonTextUpdate": {
       "en": "Update text after changes",
-      "de": "Text oben nach Eingabe aktualisieren"
+      "de": "Text nach Eingabe aktualisieren"
     },
     "buttonExample": {
       "en": "Activate/Exit demo mode: Insert sample text, all inputs will be deleted!",
-      "de": "Demo-Modus einschalten/verlassen: Beispieltext einfügen, alle Eingaben werden gelöscht!"
+      "de": "Demo-Modus aktivieren/verlassen: Beispieltext einfügen, alle Eingaben werden gelöscht!"
     },
     "inputButtonText": {
       "en": "Edit synonyms or a footnote",
@@ -85,8 +85,8 @@
       "de": "Bitte geben Sie für die im Text gekennzeichneten Variablen Synonyme an:"
     },
     "inputFootnoteVariables": {
-      "en": "Please provide a value for the footnotes marked in the text:",
-      "de": "Bitte geben Sie für die im Text gekennzeichneten Fußnoten Werte an:"
+      "en": "Please provide values for the footnotes marked in the text:",
+      "de": "Bitte geben Sie für die im Text gekennzeichneten Fußnoten Inhalte an:"
     },
     "checkResult": {
       "en": "Check inputs",
@@ -101,8 +101,8 @@
       "de": "Ergebnis ausblenden"
     },
     "switchExample": {
-      "en": "Fill-in / delete example solutions",
-      "de": "Beispiellösungen einfügen / löschen"
+      "en": "Fill-in/delete example solutions",
+      "de": "Beispiellösungen einfügen/löschen"
     },
     "showExampleResult": {
       "en": "Fill-in",

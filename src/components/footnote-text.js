@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import Markdown from '@educandu/educandu/components/markdown.js';
 
 function FootnoteText({ content }) {
 
   const { width, text } = content;
-
-  const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
   const charsWithoutWhitespace = [',', ';', '.'];
 
   const createFootnotesText = () => {
@@ -22,7 +19,8 @@ function FootnoteText({ content }) {
     return testText; 
   };
 
-  return (
+  /* eslint-disable react/jsx-indent */
+  const area = (
     <React.Fragment>
       <Markdown 
         renderAnchors
@@ -42,13 +40,14 @@ function FootnoteText({ content }) {
               className={`u-horizontally-centered u-width-${content.width}`}
               >
               {`(${obj.index + 1}) ${obj.list.length === 0 ? '' : obj.list[0]}`}
-          </Markdown>);
+            </Markdown>);
         })}
       </div>
     </React.Fragment>
   );
+  /* eslint-enable react/jsx-indent */
 
-  // return /* @__PURE__ */ React.createElement(Markdown, { renderAnchors: true, className: `u-horizontally-centered u-width-${content.width}` }, content.text);
+  return area;
 };
 
 FootnoteText.propTypes = {
