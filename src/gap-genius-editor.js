@@ -51,7 +51,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
       const nros = GapGeniusUtils.createNewReplacementObjects(exampleText);
       updateContent({ text: exampleText, replacements: nros, showExample: !showExample });
     } else {
-      updateContent({ text: '', replacements: [], showExample: !showExample });
+      updateContent({ text: '', replacements: [], showExample: !showExample, showFillIns: false });
     }
   };
 
