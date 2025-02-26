@@ -65,7 +65,7 @@ function GapResultTable({ tester, results }) {
             }  
             return (
               <tr key={index} style={tableRed}>
-                <td className='colBody'>{tester[index].expression}</td>
+                <td className='colBody'>{hideResult ? '' : tester[index].expression}</td>
                 <td className='colBody'>{tester[index].gapInput}</td>
                 <td className='colBody checkAndCrossTd'>
                   <div>{`${t('crossText')} `}</div><CrossIcon />
