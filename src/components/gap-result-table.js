@@ -1,12 +1,16 @@
-import React from 'react';
+import { Switch } from 'antd';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import CheckIcon from '../images/check.js';
 import CrossIcon from '../images/cross.js';
 import { useTranslation } from 'react-i18next';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 function GapResultTable({ tester, results }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
+
+  const [hideResult, setHideResult] = useState(true);
 
   const tableRed = {
     backgroundColor: 'rgba(255, 99, 132, 0.2)'
@@ -31,7 +35,17 @@ function GapResultTable({ tester, results }) {
     <table>
       <thead>
         <tr style={{ backgroundColor: '#6d8bb1', color: 'white' }}>
-          <th scope="col" className='colHead'>{t('searchTerm')}</th>
+          <th scope="col" className='colHead'>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              {t('searchTerm')} 
+              <Switch
+                checked={hideResult}
+                onChange={() => setHideResult(!hideResult)}
+                checkedChildren={<EyeOutlined />}
+                unCheckedChildren={<EyeInvisibleOutlined />}
+                />
+            </div>
+          </th>
           <th scope="col" className='colHead'>{t('yourInput')}</th>
           <th scope="col" className='colHead'>{t('yourResult')}</th>
         </tr>
@@ -42,7 +56,7 @@ function GapResultTable({ tester, results }) {
             if(result) {
               return (
                 <tr key={index} style={evaluatColor(result)}>
-                  <td className='colBody'>{result.match}</td>
+                  <td className='colBody'>{hideResult ? '' : result.match}</td>
                   <td className='colBody'>{result.input}</td>
                   {result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('checkText')} `}</div><CheckIcon /></td> : null }
                   {!result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('crossText')} `}</div><CrossIcon /></td> : null }
