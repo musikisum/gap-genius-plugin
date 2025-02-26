@@ -12,11 +12,11 @@ musikisum/educandu-plugin-gap-genius:
     en: Text example
     de: Beispieltext
   insertText:
-    en: Demo mode enabled
-    de: Aktiviere Demo-Modus
+    en: Demo mode
+    de: Demo-Modus
   deleteText:
-    en: Demo mode disabled
-    de: Verlasse Demo-Modus
+    en: ... exit
+    de: ... verlassen
   gameMode:
     en: Gap text
     de: Lückentext

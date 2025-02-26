@@ -1,6 +1,6 @@
 {
   "name": "@musikisum/educandu-plugin-gap-genius",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "A plugin for gap texts to assess knowledge",
   "type": "module",
   "exports": {

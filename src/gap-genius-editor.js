@@ -76,7 +76,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
       ...item, 
       list: tempList
     };
-    const newText = GapGeniusUtils.updateText(text, replacementCopy, !footnotes);
+    const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
     updateContent({ text: newText, replacements: replacementCopy });
   };
 
