@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import Markdown from '@educandu/educandu/components/markdown.js';
 
@@ -7,6 +7,12 @@ function FootnoteText({ content }) {
 
   const { width, text } = content;
   const charsWithoutWhitespace = [',', ';', '.'];
+
+  const [replacements, setReplacements] = useState(); 
+  useEffect(() => {
+    const tempObj = GapGeniusUtils.createNewReplacementObjects(text);
+    setReplacements(GapGeniusUtils.createFootnoteReplacements(tempObj));
+  }, [text]);
 
   const createFootnotesText = () => {
     let testText = text;
@@ -32,8 +38,9 @@ function FootnoteText({ content }) {
         <hr className='line' />
       </div>
       <div className='footnote-content'>
-        {content.replacements.map(obj => {
-          return (
+        {replacements 
+          ? replacements.map(obj => {
+            return (
             <Markdown
               key={obj.index} 
               renderAnchors
@@ -41,7 +48,8 @@ function FootnoteText({ content }) {
               >
               {`(${obj.index + 1}) ${obj.list.length === 0 ? '' : obj.list[0]}`}
             </Markdown>);
-        })}
+          })
+          : null}
       </div>
     </React.Fragment>
   );
