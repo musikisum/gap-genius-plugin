@@ -41,8 +41,8 @@
       "de": "Hier Fußnotentext einfügen ..."
     },
     "defaultGapInputText": {
-      "en": "Insert one or more semicolon or comma separated synonyms here ...",
-      "de": "Hier einen oder mehrere durch Semikolon oder Komma separierte Synonyme einfügen ..."
+      "en": "Insert semicolon or comma separated synonyms without search term ...",
+      "de": "Semikolon oder Komma separierte Synonyme ohne den Suchbegriff einfügen ..."
     },
     "keywordsInputMode": {
       "en": "Change variables ↓",

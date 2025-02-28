@@ -13,13 +13,13 @@ function GapResultTable({ tester, results }) {
   const [hideResult, setHideResult] = useState(true);
 
   const tableRed = {
-    backgroundColor: 'rgba(255, 99, 132, 0.2)'
+    backgroundColor: 'rgba(255, 161, 161, 0.5)'
   };
   const tableGreen = {
-    backgroundColor: 'rgba(75, 192, 192, 0.2)'
+    backgroundColor: 'rgba(222, 233, 191, 0.5)'
   };
   const tableYellow = {
-    backgroundColor: 'rgba(255, 206, 86, 0.2)'
+    backgroundColor: 'rgba(249, 236, 185, 0.5)'
   };
 
   const evaluatColor = result => {

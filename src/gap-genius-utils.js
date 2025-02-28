@@ -1,5 +1,5 @@
 // Text for exemplification, hwo does the plugin work 
-const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definition ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen, Gehör) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(zwei, drei) Töne als Akkord hören, (drei)(drei, vier) Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden, widersprüchlich), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (C)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten, andere Meinungen, Unwissenheit) anzukämpfen?';
+const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharfsinnig definiert. Man spricht von einem (Akkord)(), wenn man einen Grundton hört, hören wir keinen Grundton, wird von einem (Klang)(Geräusch) gesprochen. Nach dieser Definition ist unser musikalisches (Hören)(Wahrnehmen, Denken, Vorstellen, Gehör) entscheidend für die Verwendung der Begriffe. Man kann (zwei)(drei) Töne als Akkord hören, (drei)(vier) Töne in Terzschichtung dagegen auch als (Klang)(). Aus dieser Perspektive ist der Ausdruck C-Dur-Dreiklang (falsch)(ungenau, schlecht, zu vermeiden, widersprüchlich), denn es müsste (C-Dur-Akkord)() heißen, weil der Ausdruck aussagt, dass wir (c)() als Grundton wahrnehmen. Ist die Definition so gut, dass es sich lohnt, gegen (Windmühlen)(die Masse, Vorurteile, ungenaues Denken, alle, die meisten, andere Meinungen, Unwissenheit) anzukämpfen?';
 
 // Example object for example mode
 const exampleResults = ['Akord', 'Klang', 'Gehör', 'zwei', 'drei', 'Klang', 'falsch', 'c-Dur Akord', 'c', 'Blödheit'];
@@ -93,6 +93,13 @@ const createListFromInputLine = (inputLine, expression, footnotes) => {
   return resultForGaps;   
 };
 
+const createClippedLabelText = text => {
+  if (text.length > 14) {
+    return `${text.substring(0, 14)} ...`;    
+  }
+  return text;
+};
+
 const GapGeniusUtils = {
   regex,
   exampleText,
@@ -102,7 +109,8 @@ const GapGeniusUtils = {
   createListFromInputLine,
   createInputfromList,
   createFootnoteReplacements,
-  createGapGameReplacements
+  createGapGameReplacements,
+  createClippedLabelText
 };
 
 export default GapGeniusUtils;
