@@ -1,8 +1,8 @@
 {
   "musikisum/educandu-plugin-gap-genius": {
     "name": {
-      "en": "Example plugin",
-      "de": "Lückentext-Plugin"
+      "en": "Gap or footnote text",
+      "de": "Lücken- oder Fußnotentext"
     },
     "label": {
       "en": "Example label",
