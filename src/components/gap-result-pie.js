@@ -32,14 +32,14 @@ function GapResultPie({ results }) {
         label: t('votesText'),
         data: currentData,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 161, 161, 0.5)',
+          'rgba(222, 233, 191, 0.5)',
+          'rgba(249, 236, 185, 0.5)'
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 159, 64, 1)',
+          'rgba(255, 161, 161, 1)',
+          'rgba(211, 221, 179, 1)',
+          'rgba(239, 223, 177, 1)'
         ],
         borderWidth: 1,
       },

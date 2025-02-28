@@ -143,7 +143,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           { enableEditorInputs 
-            ? <div className='messageArea' >{ footnotes ? t('inputTextVariables') : t('inputFootnoteVariables')}</div> 
+            ? <div className='messageArea' >{ footnotes ? t('inputFootnoteVariables') : t('inputTextVariables')}</div> 
             : null }
         </Form.Item>
         { enableEditorInputs
@@ -151,7 +151,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
             return (
               <Form.Item
                 key={item.index}
-                label={`${item.index + 1}. ${item.expression}`}
+                label={`${item.index + 1}. ${GapGeniusUtils.createClippedLabelText(item.expression)}`}
                 {...FORM_ITEM_LAYOUT}
                 >
                 <EditableInput
