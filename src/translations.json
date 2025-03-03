@@ -69,8 +69,8 @@
       "de": "Text nach Eingabe aktualisieren"
     },
     "buttonExample": {
-      "en": "Activate/Exit demo mode: Insert sample text, all inputs will be deleted!",
-      "de": "Demo-Modus aktivieren/verlassen: Beispieltext einfügen, alle Eingaben werden gelöscht!"
+      "en": "Activate/Exit demo mode (Insert sample text!)",
+      "de": "Demo-Modus aktivieren/verlassen (Beispieltext wird eingefügt!)"
     },
     "inputButtonText": {
       "en": "Edit synonyms or a footnote",
@@ -105,12 +105,16 @@
       "de": "Beispiellösungen einfügen/löschen"
     },
     "showExampleResult": {
-      "en": "Fill-in",
-      "de": "Einfügen"
+      "en": "Example results",
+      "de": "Beispiellösungen"
     },
-    "hideExampleResult": {
-      "en": "Delete",
-      "de": "Löschen"
+    "deleteResults": {
+      "en": "delete",
+      "de": "löschen"
+    },
+    "insertResults": {
+      "en": "insert",
+      "de": "einfügen"
     },
     "checkText": {
       "en": "right",

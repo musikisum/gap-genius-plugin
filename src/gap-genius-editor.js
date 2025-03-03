@@ -12,7 +12,7 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { width, text, footnotes, showExample, showFillIns, replacements } = content;
+  const { width, text, cacheText, footnotes, showExample, showFillIns, replacements } = content;
   const [enableEditorInputs, setEnableEditorInputs] = useState(false);
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
@@ -49,9 +49,10 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     if (!showExample) {
       const exampleText = GapGeniusUtils.exampleText;
       const nros = GapGeniusUtils.createNewReplacementObjects(exampleText);
-      updateContent({ text: exampleText, replacements: nros, showExample: !showExample });
+      const temp = text;
+      updateContent({ text: exampleText, cacheText: temp, replacements: nros, showExample: !showExample });
     } else {
-      updateContent({ text: '', replacements: [], showExample: !showExample, showFillIns: false });
+      updateContent({ text: cacheText, replacements: [], showExample: !showExample, showFillIns: false });
     }
   };
 
@@ -111,11 +112,12 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
               <Tooltip title={t('switchExample')}>
                 <Switch
                   className='customSwitch'
+                  checkedChildren={t('insertResults')} 
+                  unCheckedChildren={t('deleteResults')}
                   defaultChecked={!showFillIns}
                   onChange={onExampleSwitchChange}
                   />
               </Tooltip>
-              <div className='switchlabelRight'>{t('hideExampleResult')}</div>
             </div>
           </div>
         </Form.Item>

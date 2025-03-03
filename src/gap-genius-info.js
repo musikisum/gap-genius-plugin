@@ -39,6 +39,7 @@ class GapGeniusInfo {
     return {
       width: 100,
       text: '',
+      cacheText: '',
       footnotes: false,
       showExample: false,
       showFillIns: false,
@@ -55,6 +56,7 @@ class GapGeniusInfo {
     const schema = joi.object({
       width: joi.number().min(0).max(100).required(),
       text: joi.string().allow('').required(),
+      cacheText: joi.string().allow('').required(),
       footnotes: joi.boolean().required(),
       showExample: joi.boolean().required(),
       showFillIns: joi.boolean().required(),

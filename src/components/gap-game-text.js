@@ -66,6 +66,9 @@ function GapGameText({ content }) {
     setResults(newResults);
   };
 
+  const table = <div className='left'><GapResultTable tester={tester} results={results} /></div>;
+  const pie = <div className='right'><GapResultPie tester={tester} results={results} /></div>;
+
   return (
     <div className={`u-horizontally-centered u-width-${width}`}>
       <div className='gaptext-content'> 
@@ -79,18 +82,7 @@ function GapGameText({ content }) {
           <Button type='primary' onClick={onRefreshButtonClick} disabled={!evaluate}>{t('refreshResult')}</Button>
         </Tooltip>
       </div>
-      <div className='gaptext-evaluation-area'>
-        <div className='left'>
-          { evaluate 
-            ? <GapResultTable tester={tester} results={results} />
-            : null}
-        </div>
-        <div className='right'>
-          { evaluate 
-            ? <GapResultPie tester={tester} results={results} />
-            : null}
-        </div>
-      </div>
+      { evaluate ? <div className='gaptext-evaluation-area'>{table}{pie}</div> : null }
     </div>
   );
 };

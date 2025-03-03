@@ -3,7 +3,7 @@ import Fuse from 'fuse.js';
 const fuseOptions = {
   includeScore: true,
   includeMatches: true,
-  threshold: 0.5,
+  threshold: 0.3,
   keys: ['gap'], // optional
 };
 

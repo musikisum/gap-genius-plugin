@@ -31,8 +31,6 @@ function GapResultTable({ tester, results }) {
     return tableRed;
   };
 
-  console.log('tester', tester, 'results', results)
-
   return (
     <table>
       <thead>
