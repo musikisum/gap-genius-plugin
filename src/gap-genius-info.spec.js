@@ -65,6 +65,7 @@ describe('gap-genius-info', () => {
       const validContent = {
         width: 60,
         text: 'Example text',
+        cacheText: '',
         footnotes: false,
         showExample: false,
         showFillIns: false,
@@ -74,10 +75,11 @@ describe('gap-genius-info', () => {
       expect(() => sut.validateContent(validContent)).not.toThrow();
     });
   
-    it('should throw an error if width is out of bounds', () => {
+    it('should throw an error if list is not an array', () => {
       const invalidContent = {
         width: 60,
         text: 'Example text',
+        cacheText: '(test)()',
         footnotes: false,
         showExample: false,
         showFillIns: true,
@@ -87,7 +89,7 @@ describe('gap-genius-info', () => {
       expect(() => sut.validateContent(invalidContent)).toThrow(joi.ValidationError);
     });
   
-    it('should throw an error if text is missing', () => {
+    it('should throw an error if text and cacheText are missing', () => {
       const invalidContent = {
         width: 60,
         text: null,
