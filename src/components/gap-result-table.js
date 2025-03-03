@@ -31,6 +31,8 @@ function GapResultTable({ tester, results }) {
     return tableRed;
   };
 
+  console.log('tester', tester, 'results', results)
+
   return (
     <table>
       <thead>
@@ -56,7 +58,7 @@ function GapResultTable({ tester, results }) {
             if(result) {
               return (
                 <tr key={index} style={evaluatColor(result)}>
-                  <td className='colBody'>{hideResult ? '' : result.match}</td>
+                  <td className='colBody'>{hideResult ? '' : tester[index].expression}</td>
                   <td className='colBody'>{result.input}</td>
                   {result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('checkText')} `}</div><CheckIcon /></td> : null }
                   {!result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('crossText')} `}</div><CrossIcon /></td> : null }
