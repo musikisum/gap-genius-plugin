@@ -4,7 +4,7 @@ import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
 import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
-import { Button, Form, Flex, Switch, Radio, Tooltip } from 'antd';
+import { Button, Form, Switch, Radio, Tooltip } from 'antd';
 import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
 import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider.js';
@@ -46,29 +46,34 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   // Provide an example to demonstrate the plugin functionalaties
   const onExampleButtonClick = () => {
+    let nros;
     if (!showExample) {
       const exampleText = GapGeniusUtils.exampleText;
-      const nros = GapGeniusUtils.createNewReplacementObjects(exampleText);
+      nros = GapGeniusUtils.createNewReplacementObjects(exampleText, footnotes);
       const temp = text;
       updateContent({ text: exampleText, cacheText: temp, replacements: nros, showExample: !showExample });
     } else {
-      updateContent({ text: cacheText, replacements: [], showExample: !showExample, showFillIns: false });
+      nros = GapGeniusUtils.createNewReplacementObjects(cacheText, footnotes);
+      updateContent({ text: cacheText, cacheText: '', replacements: nros, showExample: !showExample, showFillIns: false });
     }
   };
 
-  const onTextUpdateChange = () => {
-    const nros = GapGeniusUtils.createNewReplacementObjects(text);
+  // Save text after text changes in markdown input
+  const onTextUpdateClick = () => {
+    const nros = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
     const newText = GapGeniusUtils.updateText(text, nros, footnotes);
     updateContent({ text: newText, replacements: nros });
   };
 
-  const onEnableTextInputsChange = () => {
-    const nros = GapGeniusUtils.createNewReplacementObjects(text);
+  // Enable text input fields
+  const onEnableTextInputsClick = () => {
+    const nros = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
     const newText = GapGeniusUtils.updateText(text, nros, footnotes);
     setEnableEditorInputs(!enableEditorInputs);
-    updateContent({ text: newText, replacements: nros, footnotes });
+    updateContent({ text: newText, replacements: nros });
   };
 
+  // Save input field content after press save button
   const onReplacementsChange = (inputLine, itemIndex) => {
     const replacementCopy = cloneDeep(replacements);
     const item = replacementCopy[itemIndex];
@@ -93,7 +98,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
   
-  const onExampleSwitchChange = value => {
+  // Insert or delete ruslts for example mode input
+  const onExampleResultsSwitchChange = value => {
     updateContent({ showFillIns: !value });
   };
 
@@ -101,7 +107,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     <div className="EP_Educandu_Gap_Genius_Editor">
       <Form labelAlign="left">
         <Form.Item label={t('switchLabelText')} {...FORM_ITEM_LAYOUT}>
-          <div className='switchArea'>
+          <div className='flexArea'>
             <div className='switchContainer'>
               <Tooltip title={t('modeRadios')}>
                 <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${!footnotes}`} />
@@ -115,7 +121,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
                   checkedChildren={t('insertResults')} 
                   unCheckedChildren={t('deleteResults')}
                   defaultChecked={!showFillIns}
-                  onChange={onExampleSwitchChange}
+                  onChange={onExampleResultsSwitchChange}
                   />
               </Tooltip>
             </div>
@@ -131,17 +137,17 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
             />
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
-          <Flex className='antFlex' gap='middle'>
+          <div className='flexArea'>
             <Tooltip title={t('buttonTextInput')}>
-              <Button className='antBtn' type='primary' onClick={onEnableTextInputsChange} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
+              <Button className='antBtn' type='primary' onClick={onEnableTextInputsClick} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
             </Tooltip>
             <Tooltip title={t('buttonTextUpdate')}>
-              <Button className='antBtn' type='primary' onClick={onTextUpdateChange} disabled={enableEditorInputs || showExample}>{t('actualizeText')}</Button>
+              <Button className='antBtn' type='primary' onClick={onTextUpdateClick} disabled={enableEditorInputs || showExample}>{t('actualizeText')}</Button>
             </Tooltip>
             <Tooltip title={t('buttonExample')}>
               <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>
             </Tooltip>
-          </Flex>
+          </div>
         </Form.Item>
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           { enableEditorInputs 

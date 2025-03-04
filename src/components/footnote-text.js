@@ -17,12 +17,20 @@ function FootnoteText({ content }) {
   const createFootnotesText = () => {
     let testText = text;
     let index = 1;
-    for (const match of text.matchAll(GapGeniusUtils.regex)) {
-      const nextChar = text[match.index + match[0].length];
-      testText = testText.replace(match[0], `${match.groups.expression}(${index})${charsWithoutWhitespace.includes(nextChar) ? '' : ' '}`);
+    const matches = GapGeniusUtils.findAllExpressions(text);
+    for (const match of matches) {
+      const matchIndex = testText.indexOf(`(${match.expression})(${match.list})`);
+      if (matchIndex === -1) {
+        // eslint-disable-next-line no-continue
+        continue;
+      };
+      const nextChar = testText[matchIndex + match.expression.length + match.list.length + 4]; // Berücksichtigt die "( )" um den Ausdruck
+      const replacement = `${match.expression}(${index})${charsWithoutWhitespace.includes(nextChar) ? '' : ' '}`;
+
+      testText = testText.replace(`(${match.expression})(${match.list})`, replacement);
       index += 1;
-    }   
-    return testText; 
+    }
+    return testText;
   };
 
   /* eslint-disable react/jsx-indent */

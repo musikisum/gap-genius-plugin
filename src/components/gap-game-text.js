@@ -43,12 +43,18 @@ function GapGameText({ content }) {
   const createGapGameText = () => {
     const elements = [];
     let lastIndex = 0;
-    let index = 0;  
-    for (const match of text.matchAll(GapGeniusUtils.regex)) {
-      elements.push(text.substring(lastIndex, match.index));
-      elements.push(<GapGameTextInput key={index} index={index} onTextInputChange={onChange} showFillIns={showFillIns} />);
-      lastIndex = match.index + match[0].length;
-      index += 1;
+    let index = 0;
+    const matches = GapGeniusUtils.findAllExpressions(text);
+    for (const match of matches) {
+      const { expression, list } = match;
+      const originalMatch = `(${expression})(${list})`;
+      const matchIndex = text.indexOf(originalMatch, lastIndex);
+      if (matchIndex !== -1) {
+        elements.push(text.substring(lastIndex, matchIndex));
+        elements.push(<GapGameTextInput key={index} index={index} onTextInputChange={onChange} showFillIns={showFillIns} />);
+        lastIndex = matchIndex + originalMatch.length;
+        index += 1;
+      }
     }
     elements.push(text.substring(lastIndex));
     return elements;

@@ -38,18 +38,18 @@ musikisum/educandu-plugin-gap-genius:
   textInputMode:
     en: Modify text ↑
     de: Text bearbeiten ↑
-  actualizeText:
-    en: Save text
-    de: Text übernehmen
   modeRadios:
     en: Toggle between Gap-Game mode and footnotes mode
     de: Wechsel zwischen Lückentext- und Fußnoten-Modus
   buttonTextInput:
     en: Change input mode
     de: Eingabemodus ändern
+  actualizeText:
+    en: Save text
+    de: Eingaben sichern
   buttonTextUpdate:
-    en: Update text after changes
-    de: Text nach Eingabe aktualisieren
+    en: Save text above after changes
+    de: Sichert den Text oben nach neuen Eingaben
   buttonExample:
     en: Activate/Exit demo mode (Insert sample text!)
     de: Demo-Modus aktivieren/verlassen (Beispieltext wird eingefügt!)
