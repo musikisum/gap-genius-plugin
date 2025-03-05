@@ -49,7 +49,7 @@ class GapGeniusInfo {
 
   validateContent(content) {
     const replacementSchema = joi.object({
-      index: joi.alternatives().try(joi.number().integer().required(), joi.array().length(0)),
+      index: joi.number().integer().min(0).required(),
       expression: joi.string().required(),
       gaptext: joi.string().allow(''),
       list: joi.array().items(joi.string().allow('')).default([]).required()

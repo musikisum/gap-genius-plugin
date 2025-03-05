@@ -4,17 +4,9 @@
       "en": "Gap or footnote text",
       "de": "Lücken- oder Fußnotentext"
     },
-    "label": {
-      "en": "Example label",
-      "de": "Beispiel-Label"
-    },
     "gapText": {
       "en": "Text with variables",
       "de": "Text mit Variablen"
-    },
-    "exampleText": {
-      "en": "Text example",
-      "de": "Beispieltext"
     },
     "insertText": {
       "en": "Demo mode",
@@ -60,14 +52,6 @@
       "en": "Change input mode",
       "de": "Eingabemodus ändern"
     },
-    "actualizeText": {
-      "en": "Save text",
-      "de": "Eingaben sichern"
-    },
-    "buttonTextUpdate": {
-      "en": "Save text above after changes",
-      "de": "Sichert den Text oben nach neuen Eingaben"
-    },
     "buttonExample": {
       "en": "Activate/Exit demo mode (Insert sample text!)",
       "de": "Demo-Modus aktivieren/verlassen (Beispieltext wird eingefügt!)"
@@ -107,14 +91,6 @@
     "showExampleResult": {
       "en": "Example results",
       "de": "Beispiellösungen"
-    },
-    "deleteResults": {
-      "en": "delete",
-      "de": "löschen"
-    },
-    "insertResults": {
-      "en": "insert",
-      "de": "einfügen"
     },
     "checkText": {
       "en": "right",

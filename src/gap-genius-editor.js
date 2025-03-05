@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import Updater from './update-vaidation.js';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
 import EditableInput from './components/editable-input.js';
-import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 import { Button, Form, Switch, Radio, Tooltip } from 'antd';
+import cloneDeep from '@educandu/educandu/utils/clone-deep.js';
 import MarkdownInput from '@educandu/educandu/components/markdown-input.js';
 import { sectionEditorProps } from '@educandu/educandu/ui/default-prop-types.js';
 import ObjectWidthSlider from '@educandu/educandu/components/object-width-slider.js';
@@ -12,7 +13,8 @@ import { FORM_ITEM_LAYOUT, FORM_ITEM_LAYOUT_WITHOUT_LABEL } from '@educandu/educ
 
 export default function GapGeniusEditor({ content, onContentChanged }) {
 
-  const { width, text, cacheText, footnotes, showExample, showFillIns, replacements } = content;
+  const updatedContent = Updater.sanitizeContent(content);
+  const { width, text, cacheText, footnotes, showExample, showFillIns, replacements } = updatedContent;
   const [enableEditorInputs, setEnableEditorInputs] = useState(false);
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
@@ -108,10 +110,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
               <Tooltip title={t('switchExample')}>
                 <Switch
                   className='customSwitch'
-                  checkedChildren={t('insertResults')} 
-                  unCheckedChildren={t('deleteResults')}
-                  defaultChecked={!showFillIns}
-                  onChange={onExampleResultsSwitchChange}
+                  defaultChecked={showFillIns}
+                  onChange={checked => onExampleResultsSwitchChange(!checked)}
                   />
               </Tooltip>
             </div>
@@ -129,7 +129,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
         <Form.Item {...FORM_ITEM_LAYOUT_WITHOUT_LABEL}>
           <div className='flexArea'>
             <Tooltip title={t('buttonTextInput')}>
-              <Button className='antBtn' type='primary' onClick={onEnableTextInputsClick} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
+              <Button className='antBtn' type={enableEditorInputs ? 'primary' : ''} onClick={onEnableTextInputsClick} disabled={showExample}>{t('keywordsInputMode')}</Button>
             </Tooltip>
             <Tooltip title={t('buttonExample')}>
               <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>

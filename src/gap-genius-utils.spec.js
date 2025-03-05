@@ -1,5 +1,5 @@
-import GapGeniusUtils from './gap-genius-utils.js';
 import { describe, expect, it } from 'vitest';
+import GapGeniusUtils from './gap-genius-utils.js';
 
 describe('gap-genius-utils', () => {
 
