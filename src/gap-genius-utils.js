@@ -4,8 +4,8 @@ const exampleText = 'Carl Dahlhaus hat die Begriffe Akkord und Klang sehr scharf
 // Example object for example mode
 const exampleResults = ['Akord', 'Klang', 'Gehör', 'zwei', 'drei', 'Klang', 'falsch', 'c-Dur Akord', 'c', 'Blödheit'];
 
-// Find all matches (expression)(list)
-function findAllExpressions(text) {
+// Create an replacement object with index, espression and list properties from text 
+const createNewReplacementObjects = (text, footnotes) => {
   const matches = [];
   let searchIndex = 0;
 
@@ -34,104 +34,66 @@ function findAllExpressions(text) {
     let closeParens = 0;
     while (rightIndex < text.length) {
       if (text[rightIndex] === '(') {
-        closeParens += 1; // Eine offene Klammer -> Zukünftige geschlossene ignorieren
+        closeParens += 1;
       } else if (text[rightIndex] === ')') {
         if (closeParens > 0) {
-          closeParens -= 1; // Diese ")" gehört zu einer inneren Klammer und wird ignoriert
+          closeParens -= 1;
         } else {
-          break; // Dies ist die schließende Klammer von `list`
+          break; // match the )-sign of an expression
         }
       }
       rightIndex += 1;
     }
     // Save expression and list
     if (leftIndex >= 0 && rightIndex < text.length) {
-      const expression = text.slice(leftIndex + 1, splitIndex);
-      const list = text.slice(splitIndex + 2, rightIndex);
-      matches.push({ expression, list });
+      const expression = text.slice(leftIndex + 1, splitIndex).trim();
+      const rawList = text.slice(splitIndex + 2, rightIndex).trim();
+      const gaptext = rawList ? rawList : '';
+      let list;
+      if (footnotes) {
+        list = rawList ? [rawList] : [''];
+      } else {
+        list = rawList ? rawList.split(/[,;]\s*/).map(item => item.trim()) : [rawList];
+      }
+      matches.push({ index: matches.length, expression, gaptext, list });
     }
-    //set new searchIndex for the next )(-match
     searchIndex = rightIndex + 1;
   }
-
   return matches;
-}
-
-// Create an replacement object with index, espression and list properties from text 
-const createNewReplacementObjects = (text, footnotes) => {
-  const matches = findAllExpressions(text);
-  return matches.map((match, index) => {
-    const expression = match.expression;
-    let list;
-    if (footnotes) {
-      list = [match.list];
-    } else {
-      list = match.list
-        .split(/[,;]\s*/)
-        .filter(item => item && item !== expression);
-      list = [...new Set(list)];
-    }    
-    return { index, expression, list };
-  });
-};
-
-// Update lists in replacements for footnote mode 
-const createFootnoteReplacements = replacements => {
-  return replacements.map(obj => {
-    if (!obj.list.length) {
-      return obj;
-    };
-    const newList = [obj.list.join('; ')];
-    return { ...obj, list: newList };
-  });
-};
-
-function _escapeRegExp(expression) {
-  return expression.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Update lists in replacements for game mode
-const createGapGameReplacements = replacements => {
-  return replacements.map(obj => {
-    if (!obj.list.length || !obj.list[0]) {
-      return obj;
-    }
-    const escapedExpression = _escapeRegExp(obj.expression);
-    const tokenRegex = new RegExp(`(?:^|;\\s*)${escapedExpression}(?=\\s*[;]|$)`, 'g');
-    // Remove expression from list
-    const cleanedList = obj.list
-      .map(item => item.replace(tokenRegex, '').trim())
-      .map(item => item.replace(/^;\s*|;\s*$/g, ''))
-      .filter(Boolean);
-    return { ...obj, list: [...new Set(cleanedList)] };
-  });
 };
 
 // Update text from replacements
-function updateText(text, replacements, footnotes) {
+const updateText = (text, replacements, footnotes) => {
+  if (replacements.length === 0) {
+    return text;
+  }
   let updatedText = text;
-  let matchIndex = 0;
-  const matches = findAllExpressions(text);
-  for (const match of matches) {
-    const { expression, list } = match;
-    const replacementObj = replacements[matchIndex];
-    matchIndex += 1;
-    if (replacementObj && replacementObj.expression === expression) {
-      const inputValue = footnotes ? replacementObj.list[0] : replacementObj.list.join('; ');
-      const replacementText = `(${expression})(${inputValue ? inputValue : ''})`;
-      const originalMatch = `(${expression})(${list})`;
-      updatedText = updatedText.replace(originalMatch, replacementText);
-    }
+  const matches = createNewReplacementObjects(text, footnotes);
+  for (let index = 0; index < matches.length; index += 1) {
+    if (replacements[index]) {
+      const { expression, gaptext } = matches[index];
+      const oldResult = `(${expression})(${gaptext})`;
+      const newGapText = replacements[index]?.gaptext ?? '';
+      const newResult = `(${expression})(${newGapText})`;
+      const position = updatedText.indexOf(oldResult);
+      if (position !== -1) {
+        const head = updatedText.substring(0, position);
+        const tail = updatedText.substring(position + oldResult.length);
+        updatedText = head.concat('', newResult, tail);
+      }
+    }    
   }
   return updatedText;
-}
+};
 
 // Create text for the input copmponent
 const createInputfromList = (expression, list, footnotes) => {
   if (!list || list.length === 0) {
     return '';
   }
-  const tempList = footnotes ? [...list] : [...new Set(list)].filter(item => item !== expression);
+  const tempList = footnotes 
+    ? [...list] 
+    : [...new Set(list)].filter(item => item.toLowerCase() !== expression.toLowerCase());
   return footnotes ? tempList.join(' ') : tempList.join('; ');
 };
 
@@ -159,13 +121,10 @@ const createClippedLabelText = text => {
 const GapGeniusUtils = {
   exampleText,
   exampleResults,
-  findAllExpressions,
   updateText,
   createNewReplacementObjects,
   createListFromInputLine,
   createInputfromList,
-  createFootnoteReplacements,
-  createGapGameReplacements,
   createClippedLabelText
 };
 

@@ -51,6 +51,7 @@ class GapGeniusInfo {
     const replacementSchema = joi.object({
       index: joi.alternatives().try(joi.number().integer().required(), joi.array().length(0)),
       expression: joi.string().required(),
+      gaptext: joi.string().allow(''),
       list: joi.array().items(joi.string().allow('')).default([]).required()
     });
     const schema = joi.object({

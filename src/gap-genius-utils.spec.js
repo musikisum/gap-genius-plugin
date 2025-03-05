@@ -4,46 +4,61 @@ import { describe, expect, it } from 'vitest';
 describe('gap-genius-utils', () => {
 
   describe('createNewReplacementObjects', () => {
-    const testCases = [{ text: 'This is a text with (twice)(one) anchor (elements)([Hello](anchor) (text)!)!',
-      expected: [
-        { expression: 'twice', list: 'one' },
-        { expression: 'elements', list: '[Hello](anchor) (text)!' }
-      ] }, { text: 'This is a text with (twice)(one, two) anchor (elements)((test))!',
-      expected: [
-        { expression: 'twice', list: 'one, two' },
-        { expression: 'elements', list: '(test)' }
-      ] }, { text: 'This is a [text](https://kaiser-ulrich.de) with (twice)(one/two) anchor (elements)((test))!',
-      expected: [
-        { expression: 'twice', list: 'one/two' },
-        { expression: 'elements', list: '(test)' }
-      ] },
-    { text: 'This is a text with (skjsaksjfsfk)(one, two, three) anchor (!?=7635)(one; two; three)!',
-      expected: [
-        { expression: 'skjsaksjfsfk', list: 'one, two, three' },
-        { expression: '!?=7635', list: 'one; two; three' }
-      ] },
-    { text: 'This is a text with ((test))(one) (((blub))) anchor.',
-      expected: [
-        { expression: '(test)', list: 'one' }
-      ] },
-    { text: 'This is a text with ([Hello](anchor))(one) anchor test.',
-      expected: [
-        { expression: '[Hello](anchor)', list: 'one' }
-      ] }
+    const testCases = [
+      { text: 'This is a text with (twice)(one) anchor (elements)([Hello](anchor) (text)!)!',
+        expected: [
+          { index: 0, expression: 'twice', gaptext: 'one', list: ['one'] },
+          { index: 1, expression: 'elements', gaptext: '[Hello](anchor) (text)!', list: ['[Hello](anchor) (text)!'] }
+        ] }, { text: 'This is a text with (twice)(one, two) anchor (elements)((test))!',
+        expected: [
+          { index: 0, expression: 'twice', gaptext: 'one, two', list: ['one, two'] },
+          { index: 1, expression: 'elements', gaptext: '(test)', list: ['(test)'] }
+        ] }, { text: 'This is a [text](https://kaiser-ulrich.de) with (twice)(one/two) anchor (elements)((test))!',
+        expected: [
+          { index: 0, expression: 'twice', gaptext: 'one/two', list: ['one/two'] },
+          { index: 1, expression: 'elements', gaptext: '(test)', list: ['(test)'] }
+        ] }, { text: 'This is a text with (skjsaksjfsfk)(one, two, three) anchor (!?=7635)(one; two; three)!',
+        expected: [
+          { index: 0, expression: 'skjsaksjfsfk', gaptext: 'one, two, three', list: ['one', 'two', 'three'] },
+          { index: 1, expression: '!?=7635', gaptext: 'one; two; three', list: ['one', 'two', 'three'] }
+        ] }, { text: 'This is a text with ((test))(one) (((blub))) anchor.',
+        expected: [
+          { index: 0, expression: '(test)', gaptext: 'one', list: ['one'] }
+        ] }, { text: 'This is a text with ([Hello](anchor))(one, two) anchor test.',
+        expected: [
+          { index: 0, expression: '[Hello](anchor)', gaptext: 'one, two', list: ['one', 'two'] }
+        ] }
     ];
   
     testCases.forEach((testCase, index) => {
-      it(`should correctly extract matches for test case ${index + 1}`, () => {
-        const matches = GapGeniusUtils.findAllExpressions(testCase.text);    
-        expect(matches).toEqual(testCase.expected);
-      });
+      const footnoteValue = index < 3;
+      if (footnoteValue) {
+        it(`should correctly extract matches for test case ${index + 1}`, () => {
+          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);    
+          expect(matches).toEqual(testCase.expected);
+        });        
+      } else {
+        it(`should correctly extract matches for test case ${index + 1}`, () => {
+          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);    
+          expect(matches).toEqual(testCase.expected);
+        });
+      }
     });
   });
 
   describe('updateText', () => {
     it('should update text correctly in gap mode', () => {
       const text = 'This is a test (Akkord)(Akkord, option1, option2).';
-      const replacements = GapGeniusUtils.createNewReplacementObjects(text, false);
+      const inputLine = 'option1; option2';
+      const list = GapGeniusUtils.createListFromInputLine(inputLine, 'Akkord', false);
+      const replacements = [
+        {
+          index: 0,
+          expression: 'Akkord',
+          gaptext: inputLine,
+          list
+        }
+      ];
       const updated = GapGeniusUtils.updateText(text, replacements, false);
       expect(updated).toBe('This is a test (Akkord)(option1; option2).');
     });
@@ -51,8 +66,11 @@ describe('gap-genius-utils', () => {
     it('should update text correctly in footnote mode', () => {
       const text = 'This is a test (Akkord)(option1, option2).';
       const replacements = GapGeniusUtils.createNewReplacementObjects(text, true);
+      const inputLine = 'Akkord, option1, option2';
+      replacements[0].gaptext = inputLine;
+      replacements[0].list = GapGeniusUtils.createListFromInputLine(inputLine, replacements[0].expression, true);
       const updated = GapGeniusUtils.updateText(text, replacements, true);
-      expect(updated).toBe('This is a test (Akkord)(option1, option2).');
+      expect(updated).toBe('This is a test (Akkord)(Akkord, option1, option2).');
     });
   });
 
@@ -100,29 +118,4 @@ describe('gap-genius-utils', () => {
     });
   });
 
-  describe('createFootnoteReplacements', () => {
-    it('should update the replacement object list to contain only one element', () => {
-      const replacements = [
-        { index: 0, expression: '[Akkord](link)', list: ['[Akkord](https://link.de)', 'option1', 'option2'] }
-      ];
-      const updated = GapGeniusUtils.createFootnoteReplacements(replacements);
-      expect(updated[0].list.length).toBe(1);
-      expect(updated[0].list[0]).toBe('[Akkord](https://link.de); option1; option2');
-    });
-  });
-
-  describe('createGapGameReplacements', () => {
-    it('should update the list for gap game mode', () => {
-      const replacements = [
-        { index: 0, expression: 'Akkord', list: ['Akkord; option1; Akkord; option2'] },
-        { index: 1, expression: 'Klang', list: ['sound; noise'] },
-        { index: 2, expression: 'Akkord', list: ['Akkord'] }
-      ];
-      const updated = GapGeniusUtils.createGapGameReplacements(replacements);
-
-      expect(updated[0].list).toEqual(['option1; option2']);
-      expect(updated[1].list).toEqual(['sound; noise']);
-      expect(updated[2].list).toEqual([]);
-    });
-  });
 });

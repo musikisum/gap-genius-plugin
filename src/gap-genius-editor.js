@@ -58,19 +58,11 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     }
   };
 
-  // Save text after text changes in markdown input
-  const onTextUpdateClick = () => {
-    const nros = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    const newText = GapGeniusUtils.updateText(text, nros, footnotes);
-    updateContent({ text: newText, replacements: nros });
-  };
-
   // Enable text input fields
   const onEnableTextInputsClick = () => {
     const nros = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    const newText = GapGeniusUtils.updateText(text, nros, footnotes);
     setEnableEditorInputs(!enableEditorInputs);
-    updateContent({ text: newText, replacements: nros });
+    updateContent({ replacements: nros });
   };
 
   // Save input field content after press save button
@@ -79,7 +71,8 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
     const item = replacementCopy[itemIndex];
     const tempList = GapGeniusUtils.createListFromInputLine(inputLine, item.expression, footnotes);
     replacementCopy[itemIndex] = { 
-      ...item, 
+      ...item,
+      gaptext: inputLine,
       list: tempList
     };
     const newText = GapGeniusUtils.updateText(text, replacementCopy, footnotes);
@@ -90,10 +83,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const onGameModeSwitchChange = e => {
     // At this point, value and footnotes have different values
     const hasFootnotes = e.target.value === 'false';
-    let replacementCopy = cloneDeep(replacements);
-    replacementCopy = hasFootnotes 
-      ? GapGeniusUtils.createFootnoteReplacements(replacementCopy) 
-      : GapGeniusUtils.createGapGameReplacements(replacementCopy); 
+    const replacementCopy = GapGeniusUtils.createNewReplacementObjects(text, hasFootnotes);
     const newText = GapGeniusUtils.updateText(text, replacementCopy, hasFootnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
   };
@@ -140,9 +130,6 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           <div className='flexArea'>
             <Tooltip title={t('buttonTextInput')}>
               <Button className='antBtn' type='primary' onClick={onEnableTextInputsClick} disabled={showExample}>{enableEditorInputs ? t('keywordsInputMode'): t('textInputMode')}</Button>
-            </Tooltip>
-            <Tooltip title={t('buttonTextUpdate')}>
-              <Button className='antBtn' type='primary' onClick={onTextUpdateClick} disabled={enableEditorInputs || showExample}>{t('actualizeText')}</Button>
             </Tooltip>
             <Tooltip title={t('buttonExample')}>
               <Button className='antBtn errorColor' type='primary' onClick={onExampleButtonClick}>{ showExample ? t('deleteText') : t('insertText')}</Button>

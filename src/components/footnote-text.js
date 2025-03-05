@@ -5,30 +5,34 @@ import Markdown from '@educandu/educandu/components/markdown.js';
 
 function FootnoteText({ content }) {
 
-  const { width, text } = content;
-  const charsWithoutWhitespace = [',', ';', '.'];
+  const { width, text, footnotes } = content;
+  const mark = [',', ';', '.', '!', '?'];
 
   const [replacements, setReplacements] = useState(); 
   useEffect(() => {
-    const tempObj = GapGeniusUtils.createNewReplacementObjects(text);
-    setReplacements(GapGeniusUtils.createFootnoteReplacements(tempObj));
-  }, [text]);
+    setReplacements(GapGeniusUtils.createNewReplacementObjects(text, footnotes));
+  }, [text, footnotes]);
 
   const createFootnotesText = () => {
     let testText = text;
-    let index = 1;
-    const matches = GapGeniusUtils.findAllExpressions(text);
-    for (const match of matches) {
-      const matchIndex = testText.indexOf(`(${match.expression})(${match.list})`);
-      if (matchIndex === -1) {
-        // eslint-disable-next-line no-continue
-        continue;
-      };
-      const nextChar = testText[matchIndex + match.expression.length + match.list.length + 4]; // Berücksichtigt die "( )" um den Ausdruck
-      const replacement = `${match.expression}(${index})${charsWithoutWhitespace.includes(nextChar) ? '' : ' '}`;
-
-      testText = testText.replace(`(${match.expression})(${match.list})`, replacement);
-      index += 1;
+    const matches = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
+    for (let index = 0; index < matches.length; index += 1) {
+      const match = matches[index];
+      const matchIndex = testText.indexOf(`(${match.expression})(${match.gaptext})`);
+      if (matchIndex !== -1) {      
+        const nextCharIndex = matchIndex + 1 + match.expression.length + 2 + match.gaptext.length + 1;
+        const nextChar = testText[nextCharIndex];
+        let insertText;
+        const includesMark = mark.includes(nextChar);
+        if (includesMark) {
+          insertText = `${match.expression}${nextChar}(${index + 1})`;
+        } else {
+          insertText = `${match.expression}(${index + 1})`;
+        }
+        const head = testText.substring(0, matchIndex);
+        const tail = testText.substring(nextCharIndex + (includesMark ? 1 : 0));
+        testText = head.concat('', insertText, tail);
+      }
     }
     return testText;
   };

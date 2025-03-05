@@ -13,7 +13,7 @@ function GapGameText({ content }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 
-  const { width, text, showFillIns, replacements } = content;
+  const { width, text, footnotes, showFillIns } = content;
   const exampleResults = GapGeniusUtils.exampleResults;
 
   const [tester, setTester] = useState();
@@ -21,10 +21,11 @@ function GapGameText({ content }) {
   const [results, setResults] = useState();
 
   useEffect(() => {
-    const repl = replacements.length ? replacements : GapGeniusUtils.createNewReplacementObjects(text); 
+    const repl = GapGeniusUtils.createNewReplacementObjects(text, footnotes); 
     const obj = repl.reduce((akku, item) => {
       akku[item.index] = {
         expression: item.expression,
+        gaptext: item.gaptext,
         gapInput: showFillIns ? exampleResults[item.index] : '',
         synonyms: item.list
       };
@@ -44,10 +45,10 @@ function GapGameText({ content }) {
     const elements = [];
     let lastIndex = 0;
     let index = 0;
-    const matches = GapGeniusUtils.findAllExpressions(text);
+    const matches = GapGeniusUtils.createNewReplacementObjects(text, false);
     for (const match of matches) {
-      const { expression, list } = match;
-      const originalMatch = `(${expression})(${list})`;
+      const { expression, gaptext } = match;
+      const originalMatch = `(${expression})(${gaptext})`;
       const matchIndex = text.indexOf(originalMatch, lastIndex);
       if (matchIndex !== -1) {
         elements.push(text.substring(lastIndex, matchIndex));
