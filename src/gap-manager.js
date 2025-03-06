@@ -11,7 +11,9 @@ const getFuseMatch = test => {
   const fuse = new Fuse(test.synonyms.map(gap => ({ gap })), fuseOptions);
   const result = fuse.search(test.gapInput);
   const hasResult = result.length > 0;
-  return hasResult ? { match: result[0].item.gap, input: test.gapInput, isRight: result.length > 0 } : null;
+  return hasResult 
+    ? { match: result[0].item.gap, input: test.gapInput, isRight: true } 
+    : { match: null, input: test.gapInput, isRight: false };
 };
 
 const refreshResults = tester => {

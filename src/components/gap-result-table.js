@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 function GapResultTable({ tester, results }) {
-
+  
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
-
+  
   const [hideResult, setHideResult] = useState(true);
-
+  
   const tableRed = {
     backgroundColor: 'rgba(255, 161, 161, 0.5)'
   };
@@ -22,7 +22,7 @@ function GapResultTable({ tester, results }) {
     backgroundColor: 'rgba(249, 236, 185, 0.5)'
   };
 
-  const evaluatColor = result => {
+  const evaluateColor = result => {
     if (result.isRight && result.match === result.input) {
       return tableGreen;
     } else if (result.isRight) {
@@ -53,23 +53,30 @@ function GapResultTable({ tester, results }) {
       <tbody>
         {
           results.map((result, index) => {
-            if(result) {
+            if(result.isRight) {
               return (
-                <tr key={index} style={evaluatColor(result)}>
+                <tr key={index} className='trHeight' style={evaluateColor(result)}>
                   <td className='colBody'>{hideResult ? '' : tester[index].expression}</td>
                   <td className='colBody'>{result.input}</td>
-                  {result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('checkText')} `}</div><CheckIcon /></td> : null }
-                  {!result.isRight ? <td className='colBody checkAndCrossTd'><div>{`${t('crossText')} `}</div><CrossIcon /></td> : null }
+                  <td className='colBody checkAndCrossTd'><div>{`${t('checkText')} `}</div><CheckIcon /></td>
                 </tr>
               );
-            }  
+            } else if (!result.isRight 
+              && tester[index].gapInput !== '' 
+              && tester[index].gapInput === result.input) {
+              return (
+                <tr key={index} className='trHeight' style={evaluateColor(result)}>
+                  <td className='colBody'>{hideResult ? '' : tester[index].expression}</td>
+                  <td className='colBody'>{result.input}</td>
+                  <td className='colBody checkAndCrossTd'><div>{`${t('crossText')} `}</div><CrossIcon /></td>
+                </tr>
+              );
+            }
             return (
-              <tr key={index} style={tableRed}>
+              <tr key={index} className='trHeight'>
                 <td className='colBody'>{hideResult ? '' : tester[index].expression}</td>
                 <td className='colBody'>{tester[index].gapInput}</td>
-                <td className='colBody checkAndCrossTd'>
-                  <div>{`${t('crossText')} `}</div><CrossIcon />
-                </td>
+                <td className='colBody' />
               </tr>
             );
           })
