@@ -1,0 +1,98 @@
+musikisum/educandu-plugin-gap-genius:
+  name:
+    en: Gap or footnote text
+    de: Lücken- oder Fußnotentext
+  gapText:
+    en: Text with variables
+    de: Text mit Variablen
+  insertText:
+    en: Demo mode
+    de: Demo-Modus
+  deleteText:
+    en: ... exit
+    de: ... verlassen
+  gameMode:
+    en: Gap text
+    de: Lückentext
+  switchLabelText:
+    en: Settings 
+    de: Einstellungen
+  footNoteMode:
+    en: Footnotes
+    de: Fußnoten
+  defaultFootnoteInputText:
+    en: Insert footnote text here ...
+    de: Hier Fußnotentext einfügen ...
+  defaultGapInputText:
+    en: Insert semicolon or comma separated synonyms without search term ...
+    de: Semikolon oder Komma separierte Synonyme ohne den Suchbegriff einfügen ... 
+  keywordsInputMode:
+    en: Change variables ↓
+    de: Variablen ändern ↓
+  textInputMode:
+    en: Modify text ↑
+    de: Text bearbeiten ↑
+  modeRadios:
+    en: Toggle between Gap-Game mode and footnotes mode
+    de: Wechsel zwischen Lückentext- und Fußnoten-Modus
+  buttonTextInput:
+    en: Change input mode
+    de: Eingabemodus ändern
+  buttonExample:
+    en: Activate/Exit demo mode (Insert sample text!)
+    de: Demo-Modus aktivieren/verlassen (Beispieltext wird eingefügt!)
+  inputButtonText:
+    en: Edit synonyms or a footnote
+    de: Synonyme oder Fußnote bearbeiten
+  saveButtonText:
+    en: Save synonyms or a footnote
+    de: Synonyme oder Fußnote speichern
+  inputTextVariables:
+    en: 'Please provide a number of synonyms for the variables marked in the text:'
+    de: 'Bitte geben Sie für die im Text gekennzeichneten Variablen Synonyme an:'
+  inputFootnoteVariables:
+    en: 'Please provide values for the footnotes marked in the text:'
+    de: 'Bitte geben Sie für die im Text gekennzeichneten Fußnoten Inhalte an:'
+  checkResult:
+    en: Check inputs
+    de: Eingaben überprüfen
+  refreshResult:
+    en: Refresh result
+    de: Ergebnis aktualisieren
+  hideResult:
+    en: Hide Result
+    de: Ergebnis ausblenden
+  switchExample:
+    en: Fill-in/delete example solutions
+    de: Beispiellösungen einfügen/löschen
+  showExampleResult:
+    en: Example results
+    de: Beispiellösungen
+  checkText:
+    en: right
+    de: richtig
+  checkText2:
+    en: meant right
+    de: richtig gemeint
+  crossText:
+    en: wrong
+    de: falsch
+  searchTerm:
+    en: Gaptext expression
+    de: Lückentext-Begriff
+  yourInput:
+    en: Your input
+    de: Deine Eingabe
+  yourResult:
+    en: Your result
+    de: Dein Ergebnis
+  resultButton:
+    en: Show / Hide result
+    de: Ergebnis zeigen / verbergen
+  refreshButton:
+    en: Refresh your result after new inputs
+    de: Aktualisiere dein Ergebnis nach neuen Eingaben 
+  votesText:
+    en: '# of your inputs'
+    de: '# von deinen Eingaben'
+    

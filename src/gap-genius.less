@@ -1,0 +1,133 @@
+.EP_Educandu_Gap_Genius_Display {
+
+  .footnote-line {
+    margin: 20px auto;
+
+    .line {
+      width: 33%;
+      margin-left: 0;
+    }
+  }
+
+  .gaptext-content {
+    line-height: 2.5em;
+  }
+
+  .gaptext-button-area {
+    border-top: 1px solid gray;
+    margin: 40px 0;
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .gaptext-evaluation-area {
+    padding: 20px;
+    display: flex;
+    align-items:center;
+  }
+
+  .left {
+    flex-grow: 1;
+    padding-right: 20px;
+    border-right: 1px solid #DB6F6F;
+  }
+  .left > table {
+    width: 100%;
+  }
+  .right {
+    padding-left: 20px;
+  }
+
+  .colHead {
+    text-align: left;
+    width: 33%;
+    border-bottom: 1px solid gray;
+    padding: 2px 6px;
+  }
+  .colBody {
+    padding: 2px 6px;
+  }
+
+  .footnote-content {
+    margin-top: 0;
+    margin-left:10px;
+    font-size: 0.8em;
+    line-height: initial;
+  }
+
+  .checkAndCrossTd {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.EP_Educandu_Gap_Genius_Editor {
+
+  .ant-input-outlined.ant-input-disabled,
+  .ant-input-outlined[disabled] {
+    color: #DB6F6F !important;
+  }
+  
+  .messageArea {
+    color: @edu-success-color;
+    font-weight: bold;
+  }
+
+  .antFlex {
+    max-width: 100%;    
+  }
+  
+  .antBtn {
+    width: 30% !important;
+  }
+  .antBtn.errorColor {
+    background-color: @edu-error-color;
+  }
+  .antBtn.errorColor:hover {
+    background-color: #bd4d2b !important;
+  }
+
+  .antBtn span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .editable-input-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .text-editable-input  { 
+    flex-grow: 1;
+  }
+
+  .text-editable-input-display {
+    cursor: pointer;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
+
+  .flexArea {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .switchContainer {
+    display: flex;
+  }
+  .switchlabelLeft {
+    margin-right: 6px;
+  }
+  .switchlabelRight {
+    margin-left: 6px;
+  }
+
+}
