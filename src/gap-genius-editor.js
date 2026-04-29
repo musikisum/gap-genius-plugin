@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Updater from './update-vaidation.js';
+import Updater from './update-validation.js';
 import { useTranslation } from 'react-i18next';
 import GapGeniusUtils from './gap-genius-utils.js';
 import Info from '@educandu/educandu/components/info.js';
@@ -33,7 +33,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   ];
 
   const updateContent = newContentValues => {
-    onContentChanged({ ...content, ...newContentValues });
+    onContentChanged({ ...updatedContent, ...newContentValues });
   };
 
   // Handle plugin width in display mode 

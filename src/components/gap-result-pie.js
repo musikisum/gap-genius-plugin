@@ -4,9 +4,9 @@ import { Pie } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-function GapResultPie({ results }) {
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-  ChartJS.register(ArcElement, Tooltip, Legend);
+function GapResultPie({ results }) {
 
   const { t } = useTranslation('musikisum/educandu-plugin-gap-genius');
 

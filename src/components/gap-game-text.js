@@ -47,13 +47,12 @@ function GapGameText({ content }) {
     let index = 0;
     const matches = GapGeniusUtils.createNewReplacementObjects(text, false);
     for (const match of matches) {
-      const { expression, gaptext } = match;
-      const originalMatch = `(${expression})(${gaptext})`;
-      const matchIndex = text.indexOf(originalMatch, lastIndex);
+      const { rawMatch } = match;
+      const matchIndex = text.indexOf(rawMatch, lastIndex);
       if (matchIndex !== -1) {
         elements.push(text.substring(lastIndex, matchIndex));
         elements.push(<GapGameTextInput key={index} index={index} onTextInputChange={onChange} showFillIns={showFillIns} />);
-        lastIndex = matchIndex + originalMatch.length;
+        lastIndex = matchIndex + rawMatch.length;
         index += 1;
       }
     }

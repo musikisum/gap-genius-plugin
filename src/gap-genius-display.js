@@ -1,5 +1,5 @@
 import React from 'react';
-import Updater from './update-vaidation.js';
+import Updater from './update-validation.js';
 import FootnoteText from './components/footnote-text.js';
 import GapGameText from  './components/gap-game-text.js';
 import { sectionDisplayProps } from '@educandu/educandu/ui/default-prop-types.js';

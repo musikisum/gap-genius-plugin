@@ -1,4 +1,4 @@
-import Updater from './update-vaidation.js';
+import Updater from './update-validation.js';
 import { describe, expect, it } from 'vitest';
 
 describe('sanitizeReplacements', () => {

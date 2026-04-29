@@ -18,9 +18,9 @@ function FootnoteText({ content }) {
     const matches = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
     for (let index = 0; index < matches.length; index += 1) {
       const match = matches[index];
-      const matchIndex = testText.indexOf(`(${match.expression})(${match.gaptext})`);
-      if (matchIndex !== -1) {      
-        const nextCharIndex = matchIndex + 1 + match.expression.length + 2 + match.gaptext.length + 1;
+      const matchIndex = testText.indexOf(match.rawMatch);
+      if (matchIndex !== -1) {
+        const nextCharIndex = matchIndex + match.rawMatch.length;
         const nextChar = testText[nextCharIndex];
         let insertText;
         const includesMark = mark.includes(nextChar);

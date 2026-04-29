@@ -7,39 +7,39 @@ describe('gap-genius-utils', () => {
     const testCases = [
       { text: 'This is a text with (twice)(one) anchor (elements)([Hello](anchor) (text)!)!',
         expected: [
-          { index: 0, expression: 'twice', gaptext: 'one', list: ['one'] },
-          { index: 1, expression: 'elements', gaptext: '[Hello](anchor) (text)!', list: ['[Hello](anchor) (text)!'] }
+          { index: 0, expression: 'twice', gaptext: 'one', rawMatch: '(twice)(one)', list: ['one'] },
+          { index: 1, expression: 'elements', gaptext: '[Hello](anchor) (text)!', rawMatch: '(elements)([Hello](anchor) (text)!)', list: ['[Hello](anchor) (text)!'] }
         ] }, { text: 'This is a text with (twice)(one, two) anchor (elements)((test))!',
         expected: [
-          { index: 0, expression: 'twice', gaptext: 'one, two', list: ['one, two'] },
-          { index: 1, expression: 'elements', gaptext: '(test)', list: ['(test)'] }
+          { index: 0, expression: 'twice', gaptext: 'one, two', rawMatch: '(twice)(one, two)', list: ['one, two'] },
+          { index: 1, expression: 'elements', gaptext: '(test)', rawMatch: '(elements)((test))', list: ['(test)'] }
         ] }, { text: 'This is a [text](https://kaiser-ulrich.de) with (twice)(one/two) anchor (elements)((test))!',
         expected: [
-          { index: 0, expression: 'twice', gaptext: 'one/two', list: ['one/two'] },
-          { index: 1, expression: 'elements', gaptext: '(test)', list: ['(test)'] }
+          { index: 0, expression: 'twice', gaptext: 'one/two', rawMatch: '(twice)(one/two)', list: ['one/two'] },
+          { index: 1, expression: 'elements', gaptext: '(test)', rawMatch: '(elements)((test))', list: ['(test)'] }
         ] }, { text: 'This is a text with (skjsaksjfsfk)(one, two, three) anchor (!?=7635)(one; two; three)!',
         expected: [
-          { index: 0, expression: 'skjsaksjfsfk', gaptext: 'one, two, three', list: ['one', 'two', 'three'] },
-          { index: 1, expression: '!?=7635', gaptext: 'one; two; three', list: ['one', 'two', 'three'] }
+          { index: 0, expression: 'skjsaksjfsfk', gaptext: 'one, two, three', rawMatch: '(skjsaksjfsfk)(one, two, three)', list: ['one', 'two', 'three'] },
+          { index: 1, expression: '!?=7635', gaptext: 'one; two; three', rawMatch: '(!?=7635)(one; two; three)', list: ['one', 'two', 'three'] }
         ] }, { text: 'This is a text with ((test))(one) (((blub))) anchor.',
         expected: [
-          { index: 0, expression: '(test)', gaptext: 'one', list: ['one'] }
-        ] }, { text: 'This is a text with ([Hello](anchor))(one, two) anchor test.',
+          { index: 0, expression: '(test)', gaptext: 'one', rawMatch: '((test))(one)', list: ['one'] }
+        ] }, { text: 'This is a [text](https://kaiser-ulrich.de) with ([Hello](anchor))(one, two) anchor test.',
         expected: [
-          { index: 0, expression: '[Hello](anchor)', gaptext: 'one, two', list: ['one', 'two'] }
+          { index: 0, expression: '[Hello](anchor)', gaptext: 'one, two', rawMatch: '([Hello](anchor))(one, two)', list: ['one', 'two'] }
         ] }
     ];
-  
+
     testCases.forEach((testCase, index) => {
       const footnoteValue = index < 3;
       if (footnoteValue) {
         it(`should correctly extract matches for test case ${index + 1}`, () => {
-          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);    
+          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);
           expect(matches).toEqual(testCase.expected);
-        });        
+        });
       } else {
         it(`should correctly extract matches for test case ${index + 1}`, () => {
-          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);    
+          const matches = GapGeniusUtils.createNewReplacementObjects(testCase.text, footnoteValue);
           expect(matches).toEqual(testCase.expected);
         });
       }

@@ -47,15 +47,17 @@ const createNewReplacementObjects = (text, footnotes) => {
     // Save expression and list
     if (leftIndex >= 0 && rightIndex < text.length) {
       const expression = text.slice(leftIndex + 1, splitIndex).trim();
-      const rawList = text.slice(splitIndex + 2, rightIndex).trim();
+      const rawContent = text.slice(splitIndex + 2, rightIndex);
+      const rawList = rawContent.trim();
       const gaptext = rawList ? rawList : '';
+      const rawMatch = text.slice(leftIndex, rightIndex + 1);
       let list;
       if (footnotes) {
         list = rawList ? [rawList] : [''];
       } else {
         list = rawList ? rawList.split(/[,;]\s*/).map(item => item.trim()) : [rawList];
       }
-      matches.push({ index: matches.length, expression, gaptext, list });
+      matches.push({ index: matches.length, expression, gaptext, rawMatch, list });
     }
     searchIndex = rightIndex + 1;
   }
@@ -71,17 +73,16 @@ const updateText = (text, replacements, footnotes) => {
   const matches = createNewReplacementObjects(text, footnotes);
   for (let index = 0; index < matches.length; index += 1) {
     if (replacements[index]) {
-      const { expression, gaptext } = matches[index];
-      const oldResult = `(${expression})(${gaptext})`;
+      const { expression, rawMatch } = matches[index];
       const newGapText = replacements[index]?.gaptext ?? '';
       const newResult = `(${expression})(${newGapText})`;
-      const position = updatedText.indexOf(oldResult);
+      const position = updatedText.indexOf(rawMatch);
       if (position !== -1) {
         const head = updatedText.substring(0, position);
-        const tail = updatedText.substring(position + oldResult.length);
+        const tail = updatedText.substring(position + rawMatch.length);
         updatedText = head.concat('', newResult, tail);
       }
-    }    
+    }
   }
   return updatedText;
 };

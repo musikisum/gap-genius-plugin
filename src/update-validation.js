@@ -12,7 +12,7 @@ const sanitizeReplacements = replacements => {
   if (!Array.isArray(replacements)) {
     return [];
   }
-  const newReplaxements = replacements.reduce((akku, replacement) => {
+  const newReplacements = replacements.reduce((akku, replacement) => {
     if(typeof replacement?.index === 'number') {
       akku.push({
         index: replacement.index,
@@ -22,8 +22,8 @@ const sanitizeReplacements = replacements => {
       });
     }
     return akku;
-  }, []); 
-  return newReplaxements;
+  }, []);
+  return newReplacements;
 };
 
 const sanitizeContent = loadedContent => {
