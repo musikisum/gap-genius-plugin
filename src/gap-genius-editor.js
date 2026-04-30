@@ -33,7 +33,10 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   ];
 
   const updateContent = newContentValues => {
-    onContentChanged({ ...updatedContent, ...newContentValues });
+    const safeValues = newContentValues.replacements
+      ? { ...newContentValues, replacements: newContentValues.replacements.map(({ rawMatch: _rm, ...r }) => r) }
+      : newContentValues;
+    onContentChanged({ ...updatedContent, ...safeValues });
   };
 
   // Handle plugin width in display mode 
