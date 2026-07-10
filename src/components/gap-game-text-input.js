@@ -13,7 +13,7 @@ function GapGameTextInput({ index, onTextInputChange, showFillIns }) {
 
   return (
     <Input
-      defaultValue={showFillIns ? (exampleResults[index] ?? '') : ''}
+      defaultValue={showFillIns ? exampleResults[index] ?? '' : ''}
       onChange={e => onTextChange(index, e.target.value)} 
       style={{ display: 'inline-block', width: 200, margin: '0 10px' }}
       />

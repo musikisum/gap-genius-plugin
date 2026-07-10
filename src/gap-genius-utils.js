@@ -76,9 +76,8 @@ const updateText = (text, replacements, footnotes) => {
     const { expression, rawMatch } = matches[index];
     const position = updatedText.indexOf(rawMatch, fromIndex);
     if (position === -1) {
-      continue;
-    }
-    if (replacements[index]) {
+      // no-op, keep fromIndex unchanged
+    } else if (replacements[index]) {
       const newGapText = replacements[index]?.gaptext ?? '';
       const newResult = `(${expression})(${newGapText})`;
       const head = updatedText.substring(0, position);

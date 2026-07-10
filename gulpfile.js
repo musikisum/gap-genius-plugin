@@ -3,6 +3,7 @@ import { deleteAsync } from 'del';
 import Graceful from 'node-graceful';
 import {
   cliArgs,
+  compressFiles,
   createGithubRelease,
   createLabelInJiraIssues,
   createReleaseNotesFromCurrentTag,
@@ -107,7 +108,7 @@ export function copyToDist() {
   return gulp.src(['src/**', '!src/**/*.{js,yml}'], { base: 'src' }).pipe(gulp.dest('dist'));
 }
 
-export const build = gulp.series(buildTranslations, gulp.parallel(copyToDist, buildJs));
+export const build = gulp.series(buildTranslations, copyToDist, buildJs);
 
 export async function buildTestAppCss() {
   await deleteAsync('test-app/dist/**/*.{css,css.br,css.gz,css.map,css.map.br,css.map.gz}');
