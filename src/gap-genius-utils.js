@@ -70,18 +70,23 @@ const updateText = (text, replacements, footnotes) => {
     return text;
   }
   let updatedText = text;
+  let fromIndex = 0;
   const matches = createNewReplacementObjects(text, footnotes);
   for (let index = 0; index < matches.length; index += 1) {
+    const { expression, rawMatch } = matches[index];
+    const position = updatedText.indexOf(rawMatch, fromIndex);
+    if (position === -1) {
+      continue;
+    }
     if (replacements[index]) {
-      const { expression, rawMatch } = matches[index];
       const newGapText = replacements[index]?.gaptext ?? '';
       const newResult = `(${expression})(${newGapText})`;
-      const position = updatedText.indexOf(rawMatch);
-      if (position !== -1) {
-        const head = updatedText.substring(0, position);
-        const tail = updatedText.substring(position + rawMatch.length);
-        updatedText = head.concat('', newResult, tail);
-      }
+      const head = updatedText.substring(0, position);
+      const tail = updatedText.substring(position + rawMatch.length);
+      updatedText = head.concat('', newResult, tail);
+      fromIndex = position + newResult.length;
+    } else {
+      fromIndex = position + rawMatch.length;
     }
   }
   return updatedText;

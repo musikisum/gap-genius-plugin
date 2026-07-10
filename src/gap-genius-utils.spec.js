@@ -72,6 +72,26 @@ describe('gap-genius-utils', () => {
       const updated = GapGeniusUtils.updateText(text, replacements, true);
       expect(updated).toBe('This is a test (Akkord)(Akkord, option1, option2).');
     });
+
+    it('should update the second occurrence of a duplicated gap independently of the first', () => {
+      const text = 'Man spricht von einem (Klang)() oder auch von einem (Klang)() gesprochen.';
+      const matches = GapGeniusUtils.createNewReplacementObjects(text, false);
+      const replacements = [];
+      replacements[1] = { ...matches[1], gaptext: 'Geräusch' };
+      const updated = GapGeniusUtils.updateText(text, replacements, false);
+      expect(updated).toBe('Man spricht von einem (Klang)() oder auch von einem (Klang)(Geräusch) gesprochen.');
+    });
+
+    it('should update duplicated gaps with nested parentheses correctly and in order', () => {
+      const text = 'Erst ((test))(one) und dann nochmal ((test))(one) im Text.';
+      const matches = GapGeniusUtils.createNewReplacementObjects(text, false);
+      const replacements = [
+        { ...matches[0], gaptext: 'zwei' },
+        { ...matches[1], gaptext: 'drei' }
+      ];
+      const updated = GapGeniusUtils.updateText(text, replacements, false);
+      expect(updated).toBe('Erst ((test))(zwei) und dann nochmal ((test))(drei) im Text.');
+    });
   });
 
   describe('createListFromInputLine', () => {
