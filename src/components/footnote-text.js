@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import GapGeniusUtils from '../gap-genius-utils.js';
 import Markdown from '@educandu/educandu/components/markdown.js';
 
@@ -8,16 +8,15 @@ function FootnoteText({ content }) {
   const { width, text, footnotes } = content;
   const mark = [',', ';', '.', '!', '?'];
 
-  const [replacements, setReplacements] = useState(); 
-  useEffect(() => {
-    setReplacements(GapGeniusUtils.createNewReplacementObjects(text, footnotes));
-  }, [text, footnotes]);
+  const replacements = useMemo(
+    () => GapGeniusUtils.createNewReplacementObjects(text, footnotes),
+    [text, footnotes]
+  );
 
   const createFootnotesText = () => {
     let testText = text;
-    const matches = GapGeniusUtils.createNewReplacementObjects(text, footnotes);
-    for (let index = 0; index < matches.length; index += 1) {
-      const match = matches[index];
+    for (let index = 0; index < replacements.length; index += 1) {
+      const match = replacements[index];
       const matchIndex = testText.indexOf(match.rawMatch);
       if (matchIndex !== -1) {
         const nextCharIndex = matchIndex + match.rawMatch.length;
@@ -50,18 +49,15 @@ function FootnoteText({ content }) {
         <hr className='line' />
       </div>
       <div className='footnote-content'>
-        {replacements 
-          ? replacements.map(obj => {
-            return (
-            <Markdown
-              key={obj.index} 
-              renderAnchors
-              className={`u-horizontally-centered u-width-${content.width}`}
-              >
-              {`(${obj.index + 1}) ${obj.list.length === 0 ? '' : obj.list[0]}`}
-            </Markdown>);
-          })
-          : null}
+        {replacements.map(obj => (
+          <Markdown
+            key={obj.index}
+            renderAnchors
+            className={`u-horizontally-centered u-width-${content.width}`}
+            >
+            {`(${obj.index + 1}) ${obj.list.length === 0 ? '' : obj.list[0]}`}
+          </Markdown>
+        ))}
       </div>
     </React.Fragment>
   );

@@ -3,7 +3,6 @@ import { deleteAsync } from 'del';
 import Graceful from 'node-graceful';
 import {
   cliArgs,
-  compressFiles,
   createGithubRelease,
   createLabelInJiraIssues,
   createReleaseNotesFromCurrentTag,

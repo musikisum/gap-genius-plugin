@@ -24,11 +24,11 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
   const radioOptions = [
     {
       label: t('gameMode'),
-      value: 'true'
+      value: false
     },
     {
       label: t('footNoteMode'),
-      value: 'false'
+      value: true
     }
   ];
 
@@ -86,8 +86,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
 
   // Radio buttons to set the mode
   const onGameModeSwitchChange = e => {
-    // At this point, value and footnotes have different values
-    const hasFootnotes = e.target.value === 'false';
+    const hasFootnotes = e.target.value;
     const replacementCopy = GapGeniusUtils.createNewReplacementObjects(text, hasFootnotes);
     const newText = GapGeniusUtils.updateText(text, replacementCopy, hasFootnotes);
     updateContent({ text: newText, replacements: replacementCopy, footnotes: hasFootnotes });
@@ -105,7 +104,7 @@ export default function GapGeniusEditor({ content, onContentChanged }) {
           <div className='flexArea'>
             <div className='switchContainer'>
               <Tooltip title={t('modeRadios')}>
-                <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' defaultValue={`${!footnotes}`} />
+                <RadioGroup options={radioOptions} onChange={onGameModeSwitchChange} optionType='button' value={footnotes} />
               </Tooltip>
             </div>
             <div className='switchContainer' style={{ display: showExample && !footnotes ? 'flex' : 'none' }}>

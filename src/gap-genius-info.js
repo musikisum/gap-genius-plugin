@@ -73,17 +73,19 @@ class GapGeniusInfo {
 
   redactContent(content, targetRoomId) {
     const redactedContent = cloneDeep(content);
+    const redact = url => couldAccessUrlFromRoom(url, targetRoomId) ? url : '';
 
-    redactedContent.text = this.gfm.redactCdnResources(
-      redactedContent.text,
-      url => couldAccessUrlFromRoom(url, targetRoomId) ? url : ''
-    );
+    redactedContent.text = this.gfm.redactCdnResources(redactedContent.text || '', redact);
+    redactedContent.cacheText = this.gfm.redactCdnResources(redactedContent.cacheText || '', redact);
 
     return redactedContent;
   }
 
   getCdnResources(content) {
-    return this.gfm.extractCdnResources(content.text);
+    return [
+      ...this.gfm.extractCdnResources(content.text || ''),
+      ...this.gfm.extractCdnResources(content.cacheText || '')
+    ];
   }
 }
 

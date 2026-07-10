@@ -13,28 +13,34 @@ describe('gap-genius-info', () => {
   describe('redactContent', () => {
     it('redacts room-media resources from different rooms', () => {
       const result = sut.redactContent({
-        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)'
+        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)',
+        cacheText: ''
       }, 'rebhjf4MLq7yjeoCnYfn7E');
       expect(result).toStrictEqual({
-        text: '![Some image]()'
+        text: '![Some image]()',
+        cacheText: ''
       });
     });
 
     it('leaves room-media resources from the same room intact', () => {
       const result = sut.redactContent({
-        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)'
+        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)',
+        cacheText: ''
       }, '63cHjt3BAhGnNxzJGrTsN1');
       expect(result).toStrictEqual({
-        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)'
+        text: '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)',
+        cacheText: ''
       });
     });
 
     it('leaves non room-media resources intact', () => {
       const result = sut.redactContent({
-        text: '![Some image](cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png)'
+        text: '![Some image](cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png)',
+        cacheText: ''
       }, 'rebhjf4MLq7yjeoCnYfn7E');
       expect(result).toStrictEqual({
-        text: '![Some image](cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png)'
+        text: '![Some image](cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png)',
+        cacheText: ''
       });
     });
   });
@@ -46,7 +52,8 @@ describe('gap-genius-info', () => {
           '![Some image](cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png)',
           '![Some image](cdn://room-media/63cHjt3BAhGnNxzJGrTsN1/some-image.png)',
           '![Some image](https://external-domain.org/some-image.png)'
-        ].join('\n')
+        ].join('\n'),
+        cacheText: ''
       });
       expect(result).toStrictEqual([
         'cdn://media-library/JgTaqob5vqosBiHsZZoh1/some-image.png',
