@@ -38,9 +38,7 @@ jobs:
       - name: Build
         run: ./node_modules/.bin/gulp build
       - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance
       - name: Create Github release and tag JIRA issues
         run: |
           ./node_modules/.bin/gulp release \
